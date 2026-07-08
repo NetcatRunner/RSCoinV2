@@ -1,0 +1,6 @@
+[submodule "vendor/nlohmann"]
+	path = vendor/nlohmann
+	url = https://github.com/nlohmann/json
+[submodule "vendor/RSTools"]
+	path = vendor/RSTools
+	url = https://github.com/NetcatRunner/RSTools
