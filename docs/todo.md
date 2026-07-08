@@ -1,0 +1,4 @@
+- Update AccountStateMachine ppur limité usage de la ram
+- Mempool limté usage de la ram aussi -> dans un fichier 
+- Node -> séparer proprement le miner du coeur du node et render le coeur node plus propre (exemple eviter le subcribe dans le node pour la mempool car pas tres propre si j'oublie de subcribe)
+- Modifier le config pour limité le tas de class (tout en gardant en modularité)

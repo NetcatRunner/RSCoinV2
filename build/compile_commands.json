@@ -1,0 +1,326 @@
+[
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/src -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -I/home/roromar/repo/RSLib/RSCoin2/vendor/nlohmann/include -g -std=c++23 -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wnon-virtual-dtor -o CMakeFiles/RSCoin2.dir/src/chain/Blockchain.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/src/chain/Blockchain.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/src/chain/Blockchain.cpp",
+  "output": "CMakeFiles/RSCoin2.dir/src/chain/Blockchain.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/src -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -I/home/roromar/repo/RSLib/RSCoin2/vendor/nlohmann/include -g -std=c++23 -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wnon-virtual-dtor -o CMakeFiles/RSCoin2.dir/src/chain/ChainManager.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/src/chain/ChainManager.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/src/chain/ChainManager.cpp",
+  "output": "CMakeFiles/RSCoin2.dir/src/chain/ChainManager.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/src -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -I/home/roromar/repo/RSLib/RSCoin2/vendor/nlohmann/include -g -std=c++23 -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wnon-virtual-dtor -o CMakeFiles/RSCoin2.dir/src/chain/Factory.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/src/chain/Factory.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/src/chain/Factory.cpp",
+  "output": "CMakeFiles/RSCoin2.dir/src/chain/Factory.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/src -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -I/home/roromar/repo/RSLib/RSCoin2/vendor/nlohmann/include -g -std=c++23 -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wnon-virtual-dtor -o CMakeFiles/RSCoin2.dir/src/chain/Genesis.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/src/chain/Genesis.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/src/chain/Genesis.cpp",
+  "output": "CMakeFiles/RSCoin2.dir/src/chain/Genesis.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/src -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -I/home/roromar/repo/RSLib/RSCoin2/vendor/nlohmann/include -g -std=c++23 -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wnon-virtual-dtor -o CMakeFiles/RSCoin2.dir/src/config/NodeConfig.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/src/config/NodeConfig.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/src/config/NodeConfig.cpp",
+  "output": "CMakeFiles/RSCoin2.dir/src/config/NodeConfig.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/src -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -I/home/roromar/repo/RSLib/RSCoin2/vendor/nlohmann/include -g -std=c++23 -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wnon-virtual-dtor -o CMakeFiles/RSCoin2.dir/src/consensus/EngineFactory.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/src/consensus/EngineFactory.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/src/consensus/EngineFactory.cpp",
+  "output": "CMakeFiles/RSCoin2.dir/src/consensus/EngineFactory.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/src -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -I/home/roromar/repo/RSLib/RSCoin2/vendor/nlohmann/include -g -std=c++23 -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wnon-virtual-dtor -o CMakeFiles/RSCoin2.dir/src/consensus/pow/PowEngine.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/src/consensus/pow/PowEngine.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/src/consensus/pow/PowEngine.cpp",
+  "output": "CMakeFiles/RSCoin2.dir/src/consensus/pow/PowEngine.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/src -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -I/home/roromar/repo/RSLib/RSCoin2/vendor/nlohmann/include -g -std=c++23 -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wnon-virtual-dtor -o CMakeFiles/RSCoin2.dir/src/crypto/Factory.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/src/crypto/Factory.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/src/crypto/Factory.cpp",
+  "output": "CMakeFiles/RSCoin2.dir/src/crypto/Factory.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/src -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -I/home/roromar/repo/RSLib/RSCoin2/vendor/nlohmann/include -g -std=c++23 -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wnon-virtual-dtor -o CMakeFiles/RSCoin2.dir/src/crypto/Sha256.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/src/crypto/Sha256.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/src/crypto/Sha256.cpp",
+  "output": "CMakeFiles/RSCoin2.dir/src/crypto/Sha256.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/src -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -I/home/roromar/repo/RSLib/RSCoin2/vendor/nlohmann/include -g -std=c++23 -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wnon-virtual-dtor -o CMakeFiles/RSCoin2.dir/src/crypto/Suite.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/src/crypto/Suite.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/src/crypto/Suite.cpp",
+  "output": "CMakeFiles/RSCoin2.dir/src/crypto/Suite.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/src -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -I/home/roromar/repo/RSLib/RSCoin2/vendor/nlohmann/include -g -std=c++23 -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wnon-virtual-dtor -o CMakeFiles/RSCoin2.dir/src/log/Logger.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/src/log/Logger.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/src/log/Logger.cpp",
+  "output": "CMakeFiles/RSCoin2.dir/src/log/Logger.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/src -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -I/home/roromar/repo/RSLib/RSCoin2/vendor/nlohmann/include -g -std=c++23 -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wnon-virtual-dtor -o CMakeFiles/RSCoin2.dir/src/main.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/src/main.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/src/main.cpp",
+  "output": "CMakeFiles/RSCoin2.dir/src/main.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/src -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -I/home/roromar/repo/RSLib/RSCoin2/vendor/nlohmann/include -g -std=c++23 -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wnon-virtual-dtor -o CMakeFiles/RSCoin2.dir/src/mempool/Factory.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/src/mempool/Factory.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/src/mempool/Factory.cpp",
+  "output": "CMakeFiles/RSCoin2.dir/src/mempool/Factory.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/src -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -I/home/roromar/repo/RSLib/RSCoin2/vendor/nlohmann/include -g -std=c++23 -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wnon-virtual-dtor -o CMakeFiles/RSCoin2.dir/src/mempool/SimpleMempool.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/src/mempool/SimpleMempool.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/src/mempool/SimpleMempool.cpp",
+  "output": "CMakeFiles/RSCoin2.dir/src/mempool/SimpleMempool.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/src -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -I/home/roromar/repo/RSLib/RSCoin2/vendor/nlohmann/include -g -std=c++23 -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wnon-virtual-dtor -o CMakeFiles/RSCoin2.dir/src/network/Factory.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/src/network/Factory.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/src/network/Factory.cpp",
+  "output": "CMakeFiles/RSCoin2.dir/src/network/Factory.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/src -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -I/home/roromar/repo/RSLib/RSCoin2/vendor/nlohmann/include -g -std=c++23 -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wnon-virtual-dtor -o CMakeFiles/RSCoin2.dir/src/network/Socket.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/src/network/Socket.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/src/network/Socket.cpp",
+  "output": "CMakeFiles/RSCoin2.dir/src/network/Socket.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/src -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -I/home/roromar/repo/RSLib/RSCoin2/vendor/nlohmann/include -g -std=c++23 -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wnon-virtual-dtor -o CMakeFiles/RSCoin2.dir/src/network/TcpNetwork.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/src/network/TcpNetwork.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/src/network/TcpNetwork.cpp",
+  "output": "CMakeFiles/RSCoin2.dir/src/network/TcpNetwork.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/src -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -I/home/roromar/repo/RSLib/RSCoin2/vendor/nlohmann/include -g -std=c++23 -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wnon-virtual-dtor -o CMakeFiles/RSCoin2.dir/src/network/Wire.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/src/network/Wire.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/src/network/Wire.cpp",
+  "output": "CMakeFiles/RSCoin2.dir/src/network/Wire.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/src -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -I/home/roromar/repo/RSLib/RSCoin2/vendor/nlohmann/include -g -std=c++23 -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wnon-virtual-dtor -o CMakeFiles/RSCoin2.dir/src/node/Node.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/src/node/Node.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/src/node/Node.cpp",
+  "output": "CMakeFiles/RSCoin2.dir/src/node/Node.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/src -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -I/home/roromar/repo/RSLib/RSCoin2/vendor/nlohmann/include -g -std=c++23 -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wnon-virtual-dtor -o CMakeFiles/RSCoin2.dir/src/primitives/Codec.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/src/primitives/Codec.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/src/primitives/Codec.cpp",
+  "output": "CMakeFiles/RSCoin2.dir/src/primitives/Codec.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/src -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -I/home/roromar/repo/RSLib/RSCoin2/vendor/nlohmann/include -g -std=c++23 -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wnon-virtual-dtor -o CMakeFiles/RSCoin2.dir/src/protocol/Factory.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/src/protocol/Factory.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/src/protocol/Factory.cpp",
+  "output": "CMakeFiles/RSCoin2.dir/src/protocol/Factory.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/src -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -I/home/roromar/repo/RSLib/RSCoin2/vendor/nlohmann/include -g -std=c++23 -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wnon-virtual-dtor -o CMakeFiles/RSCoin2.dir/src/protocol/rscoin/Messages.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/src/protocol/rscoin/Messages.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/src/protocol/rscoin/Messages.cpp",
+  "output": "CMakeFiles/RSCoin2.dir/src/protocol/rscoin/Messages.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/src -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -I/home/roromar/repo/RSLib/RSCoin2/vendor/nlohmann/include -g -std=c++23 -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wnon-virtual-dtor -o CMakeFiles/RSCoin2.dir/src/protocol/rscoin/RSCoinProtocol.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/src/protocol/rscoin/RSCoinProtocol.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/src/protocol/rscoin/RSCoinProtocol.cpp",
+  "output": "CMakeFiles/RSCoin2.dir/src/protocol/rscoin/RSCoinProtocol.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/src -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -I/home/roromar/repo/RSLib/RSCoin2/vendor/nlohmann/include -g -std=c++23 -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wnon-virtual-dtor -o CMakeFiles/RSCoin2.dir/src/state/AccountStateMachine.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/src/state/AccountStateMachine.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/src/state/AccountStateMachine.cpp",
+  "output": "CMakeFiles/RSCoin2.dir/src/state/AccountStateMachine.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/src -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -I/home/roromar/repo/RSLib/RSCoin2/vendor/nlohmann/include -g -std=c++23 -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wnon-virtual-dtor -o CMakeFiles/RSCoin2.dir/src/state/Factory.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/src/state/Factory.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/src/state/Factory.cpp",
+  "output": "CMakeFiles/RSCoin2.dir/src/state/Factory.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/src -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -I/home/roromar/repo/RSLib/RSCoin2/vendor/nlohmann/include -g -std=c++23 -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wnon-virtual-dtor -o CMakeFiles/RSCoin2.dir/src/storage/Factory.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/src/storage/Factory.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/src/storage/Factory.cpp",
+  "output": "CMakeFiles/RSCoin2.dir/src/storage/Factory.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/src -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -I/home/roromar/repo/RSLib/RSCoin2/vendor/nlohmann/include -g -std=c++23 -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wnon-virtual-dtor -o CMakeFiles/RSCoin2.dir/src/storage/FileStore.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/src/storage/FileStore.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/src/storage/FileStore.cpp",
+  "output": "CMakeFiles/RSCoin2.dir/src/storage/FileStore.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/src -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -I/home/roromar/repo/RSLib/RSCoin2/vendor/nlohmann/include -g -std=c++23 -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wnon-virtual-dtor -o CMakeFiles/RSCoin2.dir/src/storage/MemoryStore.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/src/storage/MemoryStore.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/src/storage/MemoryStore.cpp",
+  "output": "CMakeFiles/RSCoin2.dir/src/storage/MemoryStore.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/src -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -I/home/roromar/repo/RSLib/RSCoin2/vendor/nlohmann/include -g -std=c++23 -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wnon-virtual-dtor -o CMakeFiles/RSCoin2.dir/src/utils/SignalHandler.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/src/utils/SignalHandler.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/src/utils/SignalHandler.cpp",
+  "output": "CMakeFiles/RSCoin2.dir/src/utils/SignalHandler.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build/vendor/RSTools",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -g -std=c++20 -Wall -Wextra -Wpedantic -Werror -o CMakeFiles/RST.dir/src/crypto/SHA256.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/src/crypto/SHA256.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/src/crypto/SHA256.cpp",
+  "output": "vendor/RSTools/CMakeFiles/RST.dir/src/crypto/SHA256.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build/vendor/RSTools",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -g -std=c++20 -Wall -Wextra -Wpedantic -Werror -o CMakeFiles/RST.dir/src/log/Format/Formatter.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/src/log/Format/Formatter.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/src/log/Format/Formatter.cpp",
+  "output": "vendor/RSTools/CMakeFiles/RST.dir/src/log/Format/Formatter.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build/vendor/RSTools",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -g -std=c++20 -Wall -Wextra -Wpedantic -Werror -o CMakeFiles/RST.dir/src/log/LogLevel.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/src/log/LogLevel.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/src/log/LogLevel.cpp",
+  "output": "vendor/RSTools/CMakeFiles/RST.dir/src/log/LogLevel.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build/vendor/RSTools",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -g -std=c++20 -Wall -Wextra -Wpedantic -Werror -o CMakeFiles/RST.dir/src/log/LogRegistry.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/src/log/LogRegistry.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/src/log/LogRegistry.cpp",
+  "output": "vendor/RSTools/CMakeFiles/RST.dir/src/log/LogRegistry.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build/vendor/RSTools",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -g -std=c++20 -Wall -Wextra -Wpedantic -Werror -o CMakeFiles/RST.dir/src/log/Logger.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/src/log/Logger.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/src/log/Logger.cpp",
+  "output": "vendor/RSTools/CMakeFiles/RST.dir/src/log/Logger.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build/vendor/RSTools",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -g -std=c++20 -Wall -Wextra -Wpedantic -Werror -o CMakeFiles/RST.dir/src/log/Sinks/ConsoleSink.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/src/log/Sinks/ConsoleSink.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/src/log/Sinks/ConsoleSink.cpp",
+  "output": "vendor/RSTools/CMakeFiles/RST.dir/src/log/Sinks/ConsoleSink.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build/vendor/RSTools",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -g -std=c++20 -Wall -Wextra -Wpedantic -Werror -o CMakeFiles/RST.dir/src/log/Sinks/FileSink.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/src/log/Sinks/FileSink.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/src/log/Sinks/FileSink.cpp",
+  "output": "vendor/RSTools/CMakeFiles/RST.dir/src/log/Sinks/FileSink.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build/vendor/RSTools",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -g -std=c++20 -Wall -Wextra -Wpedantic -Werror -o CMakeFiles/RST.dir/src/log/Sinks/RotatingFileSink.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/src/log/Sinks/RotatingFileSink.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/src/log/Sinks/RotatingFileSink.cpp",
+  "output": "vendor/RSTools/CMakeFiles/RST.dir/src/log/Sinks/RotatingFileSink.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build/vendor/RSTools",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -g -std=c++20 -Wall -Wextra -Wpedantic -Werror -o CMakeFiles/RST.dir/src/parser/ArgParser.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/src/parser/ArgParser.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/src/parser/ArgParser.cpp",
+  "output": "vendor/RSTools/CMakeFiles/RST.dir/src/parser/ArgParser.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build/vendor/RSTools",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -g -std=c++20 -Wall -Wextra -Wpedantic -Werror -o CMakeFiles/RST.dir/src/string/Join.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/src/string/Join.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/src/string/Join.cpp",
+  "output": "vendor/RSTools/CMakeFiles/RST.dir/src/string/Join.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build/vendor/RSTools",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -g -std=c++20 -Wall -Wextra -Wpedantic -Werror -o CMakeFiles/RST.dir/src/string/Split.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/src/string/Split.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/src/string/Split.cpp",
+  "output": "vendor/RSTools/CMakeFiles/RST.dir/src/string/Split.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build/vendor/RSTools",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -g -std=c++20 -Wall -Wextra -Wpedantic -Werror -o CMakeFiles/RST.dir/src/string/ToLower.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/src/string/ToLower.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/src/string/ToLower.cpp",
+  "output": "vendor/RSTools/CMakeFiles/RST.dir/src/string/ToLower.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build/vendor/RSTools",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -g -std=c++20 -Wall -Wextra -Wpedantic -Werror -o CMakeFiles/RST.dir/src/string/ToUpper.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/src/string/ToUpper.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/src/string/ToUpper.cpp",
+  "output": "vendor/RSTools/CMakeFiles/RST.dir/src/string/ToUpper.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build/vendor/RSTools",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -g -std=c++20 -Wall -Wextra -Wpedantic -Werror -o CMakeFiles/RST.dir/src/string/Trim.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/src/string/Trim.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/src/string/Trim.cpp",
+  "output": "vendor/RSTools/CMakeFiles/RST.dir/src/string/Trim.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build/vendor/RSTools",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -g -std=c++20 -Wall -Wextra -Wpedantic -Werror -o CMakeFiles/RST.dir/src/system/SystemInfo.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/src/system/SystemInfo.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/src/system/SystemInfo.cpp",
+  "output": "vendor/RSTools/CMakeFiles/RST.dir/src/system/SystemInfo.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build/vendor/RSTools",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -g -std=c++20 -Wall -Wextra -Wpedantic -Werror -o CMakeFiles/RST.dir/src/threads/ThreadPool.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/src/threads/ThreadPool.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/src/threads/ThreadPool.cpp",
+  "output": "vendor/RSTools/CMakeFiles/RST.dir/src/threads/ThreadPool.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build/vendor/RSTools",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -g -std=c++20 -Wall -Wextra -Wpedantic -Werror -o CMakeFiles/RST.dir/src/time/FrameTimer.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/src/time/FrameTimer.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/src/time/FrameTimer.cpp",
+  "output": "vendor/RSTools/CMakeFiles/RST.dir/src/time/FrameTimer.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build/vendor/RSTools",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -g -std=c++20 -Wall -Wextra -Wpedantic -Werror -o CMakeFiles/RST.dir/src/time/Timer.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/src/time/Timer.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/src/time/Timer.cpp",
+  "output": "vendor/RSTools/CMakeFiles/RST.dir/src/time/Timer.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build/vendor/RSTools/tests",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -g -std=c++20 -o CMakeFiles/run_tests.dir/log/extras_sinks_tests.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/tests/log/extras_sinks_tests.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/tests/log/extras_sinks_tests.cpp",
+  "output": "vendor/RSTools/tests/CMakeFiles/run_tests.dir/log/extras_sinks_tests.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build/vendor/RSTools/tests",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -g -std=c++20 -o CMakeFiles/run_tests.dir/log/formatter_tests.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/tests/log/formatter_tests.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/tests/log/formatter_tests.cpp",
+  "output": "vendor/RSTools/tests/CMakeFiles/run_tests.dir/log/formatter_tests.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build/vendor/RSTools/tests",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -g -std=c++20 -o CMakeFiles/run_tests.dir/log/logger_tests.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/tests/log/logger_tests.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/tests/log/logger_tests.cpp",
+  "output": "vendor/RSTools/tests/CMakeFiles/run_tests.dir/log/logger_tests.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build/vendor/RSTools/tests",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -g -std=c++20 -o CMakeFiles/run_tests.dir/log/registry_tests.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/tests/log/registry_tests.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/tests/log/registry_tests.cpp",
+  "output": "vendor/RSTools/tests/CMakeFiles/run_tests.dir/log/registry_tests.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build/vendor/RSTools/tests",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -g -std=c++20 -o CMakeFiles/run_tests.dir/log/simples_sinks_tests.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/tests/log/simples_sinks_tests.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/tests/log/simples_sinks_tests.cpp",
+  "output": "vendor/RSTools/tests/CMakeFiles/run_tests.dir/log/simples_sinks_tests.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build/vendor/RSTools/tests",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -g -std=c++20 -o CMakeFiles/run_tests.dir/main.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/tests/main.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/tests/main.cpp",
+  "output": "vendor/RSTools/tests/CMakeFiles/run_tests.dir/main.cpp.o"
+},
+{
+  "directory": "/home/roromar/repo/RSLib/RSCoin2/build/vendor/RSTools/tests",
+  "command": "/usr/bin/g++  -I/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/include -g -std=c++20 -o CMakeFiles/run_tests.dir/maths/mathsTests.cpp.o -c /home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/tests/maths/mathsTests.cpp",
+  "file": "/home/roromar/repo/RSLib/RSCoin2/vendor/RSTools/tests/maths/mathsTests.cpp",
+  "output": "vendor/RSTools/tests/CMakeFiles/run_tests.dir/maths/mathsTests.cpp.o"
+}
+]
