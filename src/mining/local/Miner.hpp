@@ -1,5 +1,6 @@
 #pragma once
 
+#include <mutex>
 #include <stop_token>
 #include <thread>
 
@@ -30,7 +31,10 @@ namespace RSCoin::Mining {
 
     private:
         void miningLoop(std::stop_token cancel);
-        core::Result<void> mineOne(std::stop_token cancel);
+        core::Result<void> mineOne();
+
+        void interruptSeal();
+        std::stop_token armSealInterrupt();
 
         Dependencies _deps;
         MiningConfig _mining;
@@ -38,6 +42,9 @@ namespace RSCoin::Mining {
 
         std::stop_source _stopSource;
         std::thread _thread;
+
+        std::mutex _sealMutex;
+        std::stop_source _sealInterrupt;
     };
 
 }

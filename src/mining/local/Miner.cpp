@@ -17,7 +17,12 @@ namespace RSCoin::Mining {
     }
 
     Miner::Miner(Dependencies dependencies, MiningConfig mining, Chain::BlockConfig block)
-        : _deps(dependencies), _mining(std::move(mining)), _block(std::move(block)) {}
+        : _deps(dependencies), _mining(std::move(mining)), _block(std::move(block)) {
+        _deps.manager.subscribe([this](const Primitives::Block&, Chain::ImportOrigin origin) {
+            if (origin == Chain::ImportOrigin::remote)
+                interruptSeal();
+        });
+    }
 
     Miner::~Miner() { stop(); }
 
@@ -35,21 +40,40 @@ namespace RSCoin::Mining {
             return;
 
         _stopSource.request_stop();
+        interruptSeal();
         _thread.join();
         RSCoin_INFO("miner stopped");
     }
 
+    void Miner::interruptSeal() {
+        std::lock_guard lock(_sealMutex);
+        _sealInterrupt.request_stop();
+    }
+
+    std::stop_token Miner::armSealInterrupt() {
+        std::lock_guard lock(_sealMutex);
+        _sealInterrupt = std::stop_source{};
+        return _sealInterrupt.get_token();
+    }
+
     void Miner::miningLoop(std::stop_token cancel) {
         while (!cancel.stop_requested()) {
-            auto mined = mineOne(cancel);
-            if (!mined && mined.error().code != core::ErrorCode::cancelled) {
-                RSCoin_WARN("mining failed: {}", mined.error().describe());
-                std::this_thread::sleep_for(kRetryDelay);
+            auto mined = mineOne();
+            if (mined || mined.error().code != core::ErrorCode::cancelled) {
+                if (!mined) {
+                    RSCoin_WARN("mining failed: {}", mined.error().describe());
+                    std::this_thread::sleep_for(kRetryDelay);
+                }
+                continue;
             }
+            if (!cancel.stop_requested())
+                RSCoin_INFO("sealing interrupted (chain advanced) — restarting from height {}", _deps.chain.height() + 1);
         }
     }
 
-    core::Result<void> Miner::mineOne(std::stop_token cancel) {
+    core::Result<void> Miner::mineOne() {
+        const std::stop_token cancel = armSealInterrupt();
+
         Primitives::Block draft;
         draft.header.parentHash = _deps.chain.headHash();
         draft.header.height = _deps.chain.height() + 1;
