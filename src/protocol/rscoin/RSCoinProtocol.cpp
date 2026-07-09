@@ -119,6 +119,7 @@ namespace RSCoin::Protocol {
             if (message.block.header.height > it->second.peerHeight)
                 it->second.peerHeight = message.block.header.height;
         }
+        RSCoin_INFO("received block {} from {}", message.block.header.height, from.value);
         importFrom(from, message.block);
     }
 
@@ -133,10 +134,12 @@ namespace RSCoin::Protocol {
                 break;
             reply.blocks.push_back(std::move(*block));
         }
+        RSCoin_INFO("serving {} block(s) from height {} to {}", reply.blocks.size(), request.fromHeight, from.value);
         (void)Protocol::send(_network, from, reply);
     }
 
     void RSCoinProtocol::handleBlocks(const Network::PeerId& from, const BlocksMessage& message) {
+        std::size_t imported = 0;
         for (const auto& block : message.blocks) {
             auto outcome = _services.manager.importBlock(block, Chain::ImportOrigin::remote);
             if (!outcome) {
@@ -147,7 +150,11 @@ namespace RSCoin::Protocol {
                 dropPeer(from, core::Error{core::ErrorCode::protocol, "peer sent an invalid block"});
                 return;
             }
+            if (*outcome == Chain::ImportOutcome::imported)
+                ++imported;
         }
+        if (!message.blocks.empty())
+            RSCoin_INFO("sync: received {} block(s) from {}, imported {} (local height {})", message.blocks.size(), from.value, imported, _services.chain.height());
 
         std::uint64_t peerHeight = 0;
         {
@@ -183,7 +190,11 @@ namespace RSCoin::Protocol {
             return;
         }
         switch (*outcome) {
+            case Chain::ImportOutcome::imported:
+                RSCoin_INFO("imported block {} from {} (new head)", block.header.height, from.value);
+                break;
             case Chain::ImportOutcome::orphaned:
+                RSCoin_INFO("block {} from {} is orphaned — requesting catch-up from height {}", block.header.height, from.value, _services.chain.height() + 1);
                 requestBlocks(from, _services.chain.height() + 1);
                 break;
             case Chain::ImportOutcome::invalid:
@@ -212,6 +223,7 @@ namespace RSCoin::Protocol {
 
         if (targets.empty())
             return;
+        RSCoin_INFO("announcing block {} to {} peer(s)", block.header.height, targets.size());
         const NewBlockMessage message{block};
         for (const auto& peer : targets) {
             (void)Protocol::send(_network, peer, message);
@@ -242,6 +254,7 @@ namespace RSCoin::Protocol {
     }
 
     void RSCoinProtocol::requestBlocks(const Network::PeerId& peer, std::uint64_t fromHeight) {
+        RSCoin_INFO("requesting blocks from height {} ({})", fromHeight, peer.value);
         (void)Protocol::send(_network, peer, GetBlocksMessage{.fromHeight = fromHeight, .maxCount = kMaxBlocksPerRequest});
     }
 
