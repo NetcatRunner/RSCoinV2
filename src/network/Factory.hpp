@@ -2,10 +2,10 @@
 
 #include <memory>
 
-#include "config/NodeConfig.hpp"
+#include "network/NetworkConfig.hpp"
 #include "core/Result.hpp"
 #include "network/INetwork.hpp"
 
 namespace RSCoin::Network {
-    core::Result<std::unique_ptr<INetwork>> makeNetwork(const Config::NetworkConfig& config);
+    core::Result<std::unique_ptr<INetwork>> makeNetwork(const NetworkConfig& config);
 }

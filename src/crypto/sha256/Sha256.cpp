@@ -1,4 +1,4 @@
-#include "crypto/Sha256.hpp"
+#include "crypto/sha256/Sha256.hpp"
 
 #include <algorithm>
 #include <cstring>
@@ -34,26 +34,26 @@ namespace RSCoin::Crypto {
     }
 
     Sha256& Sha256::reset() noexcept {
-        m_blocklen = 0;
-        m_bitlen   = 0;
-        m_state[0] = 0x6a09e667u;
-        m_state[1] = 0xbb67ae85u;
-        m_state[2] = 0x3c6ef372u;
-        m_state[3] = 0xa54ff53au;
-        m_state[4] = 0x510e527fu;
-        m_state[5] = 0x9b05688cu;
-        m_state[6] = 0x1f83d9abu;
-        m_state[7] = 0x5be0cd19u;
+        _blocklen = 0;
+        _bitlen   = 0;
+        _state[0] = 0x6a09e667u;
+        _state[1] = 0xbb67ae85u;
+        _state[2] = 0x3c6ef372u;
+        _state[3] = 0xa54ff53au;
+        _state[4] = 0x510e527fu;
+        _state[5] = 0x9b05688cu;
+        _state[6] = 0x1f83d9abu;
+        _state[7] = 0x5be0cd19u;
         return *this;
     }
 
     Sha256& Sha256::update(const std::uint8_t* data, std::size_t length) {
         for (std::size_t i = 0; i < length; ++i) {
-            m_data[m_blocklen++] = data[i];
-            if (m_blocklen == 64) {
+            _data[_blocklen++] = data[i];
+            if (_blocklen == 64) {
                 transform();
-                m_bitlen  += 512;
-                m_blocklen = 0;
+                _bitlen  += 512;
+                _blocklen = 0;
             }
         }
         return *this;
@@ -87,19 +87,19 @@ namespace RSCoin::Crypto {
         std::uint32_t m[64];
 
         for (std::uint8_t i = 0, j = 0; i < 16; ++i, j += 4) {
-            m[i] = (static_cast<std::uint32_t>(m_data[j    ]) << 24)
-                | (static_cast<std::uint32_t>(m_data[j + 1]) << 16)
-                | (static_cast<std::uint32_t>(m_data[j + 2]) <<  8)
-                |  static_cast<std::uint32_t>(m_data[j + 3]);
+            m[i] = (static_cast<std::uint32_t>(_data[j    ]) << 24)
+                | (static_cast<std::uint32_t>(_data[j + 1]) << 16)
+                | (static_cast<std::uint32_t>(_data[j + 2]) <<  8)
+                |  static_cast<std::uint32_t>(_data[j + 3]);
         }
         for (std::uint8_t k = 16; k < 64; ++k) {
             m[k] = sig1(m[k - 2]) + m[k - 7] + sig0(m[k - 15]) + m[k - 16];
         }
 
-        std::uint32_t a = m_state[0], b = m_state[1],
-                    c = m_state[2], d = m_state[3],
-                    e = m_state[4], f = m_state[5],
-                    g = m_state[6], h = m_state[7];
+        std::uint32_t a = _state[0], b = _state[1],
+                    c = _state[2], d = _state[3],
+                    e = _state[4], f = _state[5],
+                    g = _state[6], h = _state[7];
 
         for (std::uint8_t i = 0; i < 64; ++i) {
             const std::uint32_t S1  = rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25);
@@ -115,33 +115,33 @@ namespace RSCoin::Crypto {
             a = t1 + t2;
         }
 
-        m_state[0] += a; m_state[1] += b;
-        m_state[2] += c; m_state[3] += d;
-        m_state[4] += e; m_state[5] += f;
-        m_state[6] += g; m_state[7] += h;
+        _state[0] += a; _state[1] += b;
+        _state[2] += c; _state[3] += d;
+        _state[4] += e; _state[5] += f;
+        _state[6] += g; _state[7] += h;
     }
 
     void Sha256::pad() {
-        std::uint64_t i = m_blocklen;
-        std::uint8_t end = (m_blocklen < 56) ? 56 : 64;
+        std::uint64_t i = _blocklen;
+        std::uint8_t end = (_blocklen < 56) ? 56 : 64;
 
-        m_data[i++] = 0x80;
-        while (i < end) m_data[i++] = 0x00;
+        _data[i++] = 0x80;
+        while (i < end) _data[i++] = 0x00;
 
-        if (m_blocklen >= 56) {
+        if (_blocklen >= 56) {
             transform();
-            std::memset(m_data, 0, 56);
+            std::memset(_data, 0, 56);
         }
 
-        m_bitlen += m_blocklen * 8;
-        m_data[63] = static_cast<std::uint8_t>(m_bitlen);
-        m_data[62] = static_cast<std::uint8_t>(m_bitlen >>  8);
-        m_data[61] = static_cast<std::uint8_t>(m_bitlen >> 16);
-        m_data[60] = static_cast<std::uint8_t>(m_bitlen >> 24);
-        m_data[59] = static_cast<std::uint8_t>(m_bitlen >> 32);
-        m_data[58] = static_cast<std::uint8_t>(m_bitlen >> 40);
-        m_data[57] = static_cast<std::uint8_t>(m_bitlen >> 48);
-        m_data[56] = static_cast<std::uint8_t>(m_bitlen >> 56);
+        _bitlen += _blocklen * 8;
+        _data[63] = static_cast<std::uint8_t>(_bitlen);
+        _data[62] = static_cast<std::uint8_t>(_bitlen >>  8);
+        _data[61] = static_cast<std::uint8_t>(_bitlen >> 16);
+        _data[60] = static_cast<std::uint8_t>(_bitlen >> 24);
+        _data[59] = static_cast<std::uint8_t>(_bitlen >> 32);
+        _data[58] = static_cast<std::uint8_t>(_bitlen >> 40);
+        _data[57] = static_cast<std::uint8_t>(_bitlen >> 48);
+        _data[56] = static_cast<std::uint8_t>(_bitlen >> 56);
         transform();
     }
 
@@ -149,7 +149,7 @@ namespace RSCoin::Crypto {
         for (std::uint8_t i = 0; i < 4; ++i) {
             for (std::uint8_t j = 0; j < 8; ++j) {
                 hash[i + j * 4] = static_cast<std::uint8_t>(
-                    (m_state[j] >> (24 - i * 8)) & 0xff
+                    (_state[j] >> (24 - i * 8)) & 0xff
                 );
             }
         }
@@ -257,7 +257,7 @@ namespace RSCoin::Crypto {
     bool Sha256::equal(const Digest& a, const Digest& b) noexcept {
         std::uint8_t diff = 0;
         for (std::size_t i = 0; i < a.size(); ++i)
-            diff |= a[i] ^ b[i];
+            diff = static_cast<std::uint8_t>(diff | (a[i] ^ b[i]));
         return diff == 0;
     }
 

@@ -1,24 +1,46 @@
-#include "mempool/SimpleMempool.hpp"
+#include "mempool/simple/SimpleMempool.hpp"
 
 #include <algorithm>
 
+#include "log/Logger.hpp"
+
 namespace RSCoin::Mempool {
 
-    core::Result<void> SimpleMempool::add(Primitives::Transaction transaction) {
-        std::lock_guard lock(_mutex);
+    SimpleMempool::SimpleMempool(Chain::IChainManager& manager): _manager(manager) {}
 
-        const bool duplicate = std::ranges::any_of(_transactions, [&](const auto& known) {
-            return known.from == transaction.from && known.nonce == transaction.nonce;
-        });
-        if (duplicate)
-            return core::fail(core::ErrorCode::validation, "transaction already in mempool");
+    core::Result<AddOutcome> SimpleMempool::add(Primitives::Transaction transaction) {
+        if (const auto valid = _manager.ledger()->validateTransaction(transaction); !valid) {
+            RSCoin_WARN("transaction rejected: {}", valid.error().describe());
+            return AddOutcome::rejected;
+        }
 
-        _transactions.push_back(std::move(transaction));
-        return {};
+        std::vector<TxSubscriber> subscribers;
+        {
+            std::lock_guard lock(_mutex);
+            if (std::ranges::any_of(_transactions, [&](const auto& known) { return known.from == transaction.from && known.nonce == transaction.nonce; })) {
+                return AddOutcome::alreadyKnown;
+            } 
+            _transactions.push_back(transaction);
+            subscribers = _subscribers;
+            RSCoin_INFO("transaction admitted (pool size {})", _transactions.size());
+        }
+
+        for (const auto& subscriber : subscribers)
+            subscriber(transaction);
+        return AddOutcome::added;
     }
 
     std::vector<Primitives::Transaction> SimpleMempool::take(std::size_t maxCount) {
+        const auto ledger = _manager.ledger();
+
         std::lock_guard lock(_mutex);
+        std::erase_if(_transactions, [&](const auto& known) {
+            const auto valid = ledger->validateTransaction(known);
+            if (!valid)
+                RSCoin_WARN("evicting stale transaction: {}", valid.error().describe());
+            return !valid.has_value();
+        });
+
         const std::size_t count = std::min(maxCount, _transactions.size());
         return {_transactions.begin(), _transactions.begin() + static_cast<std::ptrdiff_t>(count)};
     }
@@ -35,6 +57,11 @@ namespace RSCoin::Mempool {
     std::size_t SimpleMempool::size() const noexcept {
         std::lock_guard lock(_mutex);
         return _transactions.size();
+    }
+
+    void SimpleMempool::subscribe(TxSubscriber subscriber) {
+        std::lock_guard lock(_mutex);
+        _subscribers.push_back(std::move(subscriber));
     }
 
 }

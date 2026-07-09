@@ -1,4 +1,4 @@
-#include "network/Socket.hpp"
+#include "network/tcp/Socket.hpp"
 
 #include <arpa/inet.h>
 #include <netdb.h>
@@ -9,6 +9,7 @@
 #include <cerrno>
 #include <cstring>
 #include <utility>
+#include <iostream>
 
 namespace RSCoin::Network {
 

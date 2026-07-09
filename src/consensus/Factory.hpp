@@ -2,11 +2,13 @@
 
 #include <memory>
 
-#include "config/NodeConfig.hpp"
-#include "core/Result.hpp"
+#include "consensus/ConsensusConfig.hpp"
 #include "consensus/IConsensus.hpp"
+#include "core/Result.hpp"
 #include "crypto/ICrypto.hpp"
 
 namespace RSCoin::Consensus {
-    core::Result<std::unique_ptr<Consensus::IConsensus>> makeEngine(const Config::ConsensusConfig& config, const Crypto::ICryptoProvider& crypto);
+
+    core::Result<std::unique_ptr<IConsensus>> makeEngine(const ConsensusConfig& config, const Crypto::ICryptoProvider& crypto);
+
 }

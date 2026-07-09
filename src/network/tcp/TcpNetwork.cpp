@@ -1,11 +1,11 @@
-#include "network/TcpNetwork.hpp"
+#include "network/tcp/TcpNetwork.hpp"
 
 #include <array>
 #include <charconv>
 #include <utility>
 
 #include "log/Logger.hpp"
-#include "network/Wire.hpp"
+#include "network/tcp/Wire.hpp"
 
 namespace RSCoin::Network {
 
@@ -26,7 +26,7 @@ namespace RSCoin::Network {
         }
     }
 
-    TcpNetwork::TcpNetwork(Config::NetworkConfig config) : _config(std::move(config)) {}
+    TcpNetwork::TcpNetwork(NetworkConfig config) : _config(std::move(config)) {}
 
     TcpNetwork::~TcpNetwork() { stop(); }
 
@@ -169,11 +169,17 @@ namespace RSCoin::Network {
             peer->id = PeerId{socket.remoteAddress() + "#" + std::to_string(_nextPeerNumber++)};
             peer->socket = std::move(socket);
             _peers[peer->id] = peer;
-            _readers.emplace_back([this, peer] { readerLoop(peer); });
         }
 
+        // Contrat du transport : onPeerConnected est délivré AVANT le premier
+        // onMessage du pair — le reader ne démarre qu'après la notification.
         RSCoin_INFO("peer connected: {}", peer->id.value);
         _observer->onPeerConnected(peer->id);
+
+        std::lock_guard lock(_mutex);
+        if (!_running)
+            return {};
+        _readers.emplace_back([this, peer] { readerLoop(peer); });
         return {};
     }
 

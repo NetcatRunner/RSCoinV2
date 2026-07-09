@@ -3,13 +3,15 @@
 #include "chain/IBlockchain.hpp"
 #include "chain/IChainManager.hpp"
 #include "crypto/ICrypto.hpp"
+#include "mempool/IMempool.hpp"
 
 namespace RSCoin::Protocol {
 
-    struct ChainServices {
+    struct NodeServices {
         Chain::IBlockchain& chain;
         Chain::IChainManager& manager;
         const Crypto::IHasher& hasher;
+        Mempool::IMempool& mempool;
     };
 
 }

@@ -2,7 +2,8 @@
 
 #include <map>
 
-#include "config/NodeConfig.hpp"
+#include "chain/GenesisConfig.hpp"
+#include "state/StateConfig.hpp"
 #include "crypto/ICrypto.hpp"
 #include "state/IStateMachine.hpp"
 
@@ -10,7 +11,7 @@ namespace RSCoin::State {
 
     class AccountStateMachine : public IStateMachine {
     public:
-        AccountStateMachine(const Crypto::IHasher& hasher, const Config::StateConfig& rules, const Config::GenesisConfig& genesis);
+        AccountStateMachine(const Crypto::IHasher& hasher, const StateConfig& rules, const Chain::GenesisConfig& genesis);
 
         core::Result<void> validateTransaction(const Primitives::Transaction& transaction) const override;
         core::Result<std::unique_ptr<IStateMachine>> apply(const Primitives::Block& block) const override;

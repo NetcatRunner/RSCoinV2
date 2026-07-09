@@ -14,52 +14,52 @@ la séparation exécution/consensus d'Ethereum, le header à données de scellem
 
 | Directive | Mécanisme qui la garantit |
 |---|---|
-| Modularité extrême | Chaque module = un dossier sous `src/` avec son namespace. Communication uniquement via `src/interfaces/` (classes pures). Règle d'includes : un module d'implémentation n'inclut JAMAIS un autre module d'implémentation — uniquement `core/`, `interfaces/`, `config/`. |
-| Consensus pluggable | `IConsensus` = `verify` / `prepare` / `seal` / `compare`. Les données propres à un moteur (nonce PoW, signatures PoA, attestations PoS) vivent dans `BlockHeader::consensusSeal` (octets opaques). Le moteur est choisi par `consensus.engine` dans la config, résolu par `EngineFactory`. |
-| Zéro hardcoding | Genesis (timestamp, allocations, seal initial), chainId, ports, backends, paramètres moteur : tout vient de `NodeConfig`, chargé depuis un fichier au démarrage. Dans le code : constantes nommées uniquement. |
+| Modularité extrême | Chaque module = un dossier sous `src/` avec son namespace, qui héberge son propre contrat (`I*.hpp`). Règle d'includes : d'un autre module on n'inclut QUE son contrat — jamais une implémentation. |
+| Consensus pluggable | `IConsensus` = `verify` / `prepare` / `seal` / `compare`. Les données propres à un moteur (nonce PoW, signatures PoA, attestations PoS) vivent dans `BlockHeader::consensusSeal` (octets opaques). Le moteur est choisi par `consensus.engine` dans la config, résolu par sa `Factory`. |
+| Zéro hardcoding | Genesis (timestamp, allocations, seal initial), chainId, ports, backends, paramètres moteur : tout vient du fichier de configuration (`Config::Store`, sections typées par module). Dans le code : constantes nommées uniquement. |
 | C++ moderne | C++23. `std::expected` aux frontières de modules (pas d'exceptions dans les contrats). `std::stop_token` pour l'annulation (seal PoW interruptible). `unique_ptr` aux frontières d'ownership, références partout ailleurs. Agrégats (`Modules`, `WriteBatch`, configs) pour respecter ≤ 3 paramètres par méthode / ≤ 4 par fonction. |
 
 ## Arborescence
+
+**Convention** : la racine d'un module contient son **contrat** (`I*.hpp`), sa **config**
+(`*Config.hpp`, section typée du fichier JSON) et sa **Factory** (seule surface visible de
+`main.cpp`). Chaque **implémentation** vit dans un sous-dossier portant le nom de la
+variante que la config sélectionne — ajouter une variante = ajouter un dossier + une
+entrée dans la Factory, rien d'autre ne bouge.
 
 ```
 RSCoin2/
 ├── CMakeLists.txt                  # unique : GLOB_RECURSE src/*.cpp → exécutable RSCoin2
 ├── ARCHITECTURE.md
 ├── config/
-│   ├── node.pow.json               # même nœud, moteur PoW
-│   └── node.poa.json               # même nœud, moteur PoA — seule la config change
+│   └── node.pow.json               # tout le nœud vient d'ici (genesis compris)
 └── src/
     ├── main.cpp                    # composition root : seul endroit où les concrets sont assemblés
-    ├── core/                       # types de base — n'inclut RIEN d'autre
-    │   ├── Types.hpp               # Bytes, Hash256, Address, Amount, clés…
-    │   └── Result.hpp              # Error + Result<T> (std::expected)
-    ├── primitives/                 # objets du domaine — n'inclut que core/
-    │   ├── Transaction.hpp         # transaction typée (façon EIP-2718)
-    │   └── Block.hpp               # BlockHeader (seal opaque + extraData + extensions), Block
-    ├── config/                     # NodeConfig + chargement depuis un fichier
+    ├── core/                       # Types, Result (std::expected), Hex — n'inclut RIEN d'autre
+    ├── primitives/                 # Block, Transaction, Codec canonique — n'inclut que core/
+    ├── config/                     # Store (get<T>() unique) + Section/Reader (façade sans JSON)
     ├── log/                        # Logger (RST) — infrastructure, comme core/
     ├── utils/                      # SignalHandler…
-    ├── crypto/                     # ICrypto.hpp (contrat) + suites concrètes
-    ├── storage/                    # IStorage.hpp + backends (memory, file…)
+    ├── crypto/                     # ICrypto + CryptoConfig + Factory
+    │   ├── sha256/                 #   hasher "sha256d" (+ algorithme SHA-256)
+    │   └── stub/                   #   schéma "insecure-stub" (secp256k1/ à venir)
+    ├── storage/                    # IStorage + StorageConfig + Factory
+    │   ├── memory/                 #   backend "memory"
+    │   └── file/                   #   backend "file"
     ├── network/                    # TRANSPORT : des octets, aucune sémantique
-    │   ├── INetwork.hpp            # contrat + Endpoint/PeerId/NetMessage/INetworkObserver
-    │   ├── Socket.hpp/.cpp         # socket TCP POSIX en RAII (détail privé)
-    │   ├── Wire.hpp                # framing [topic:2][length:4][payload] (détail privé)
-    │   ├── TcpNetwork.hpp/.cpp     # accept-thread + 1 reader-thread par pair
-    │   └── Factory.hpp/.cpp        # route config network.transport ("tcp")
-    ├── protocol/                   # SÉMANTIQUE : pluggable, comme le consensus
-    │   ├── IProtocol.hpp           # INetworkObserver + name() + tick()
-    │   ├── Factory.hpp/.cpp        # route config protocol.name ("rscoin", demain "bitcoin"…)
-    │   └── rscoin/                 # 1er protocole : Status{version,chainId} + ping/pong
-    ├── consensus/                  # IConsensus.hpp + EngineFactory + pow/ pos/ poa/ (à venir)
-    ├── state/                      # IStateMachine.hpp + implémentations
-    ├── mempool/                    # IMempool.hpp + implémentations
-    ├── chain/                      # IChainView.hpp (+ GenesisBuilder à venir)
+    │   └── tcp/                    #   transport "tcp" (TcpNetwork, Socket, Wire, Peer)
+    ├── protocol/                   # SÉMANTIQUE : IProtocol + boîte à outils (Message, Dispatcher, Codec)
+    │   └── rscoin/                 #   protocole "rscoin" (Status, blocs, transactions, ping/pong)
+    ├── consensus/                  # IConsensus + ConsensusConfig + Factory
+    │   └── pow/                    #   moteur "pow" (pos/, poa/ à venir)
+    ├── state/                      # IStateMachine (immuable) + StateConfig + Factory
+    │   └── account/                #   modèle par comptes (à la Ethereum)
+    ├── mempool/                    # IMempool + Factory
+    │   └── simple/                 #   pool FIFO auto-nettoyant
+    ├── mining/                     # IMiner + MiningConfig + Factory + Miner (générique : pas de variante)
+    ├── chain/                      # IBlockchain/IChainManager + Blockchain/ChainManager/Genesis (canoniques)
     └── node/                       # le nœud — ne voit QUE les contrats
-        └── Node.hpp/.cpp
 ```
-
-Chaque module héberge son propre contrat (`I*.hpp`) à côté de ses implémentations.
 
 ## Graphe de dépendances (règle d'or)
 
@@ -116,8 +116,8 @@ bloc ; le protocole ne sait pas ce qu'est une socket.
 1. `./RSCoin2 config/node.pow.json` → nœud PoW.
 2. `./RSCoin2 config/node.poa.json` → nœud PoA. **Aucune recompilation, zéro ligne
    de code modifiée** : seule la valeur `consensus.engine` diffère.
-3. Ajouter un moteur = créer `src/consensus/<nom>/` (qui n'inclut que
-   `core/`+`interfaces/`+`config/`) + une entrée dans `EngineFactory`. Rien d'autre ne bouge.
+3. Ajouter un moteur = créer `src/consensus/<nom>/` + une entrée dans
+   `consensus/Factory`. Rien d'autre ne bouge.
 
 ## Modèle de threading
 
@@ -155,12 +155,12 @@ les modules `chain`/`state` à venir.
 
 ## État actuel et prochaines étapes
 
-Le squelette **configure, compile, linke et s'exécute** : chaque factory renvoie pour
-l'instant une erreur propre (`notImplemented`) — aucune logique métier n'existe encore,
-par design.
+Le nœud est fonctionnel de bout en bout : il démarre depuis le JSON (genesis compris),
+mine en PoW sur son propre thread, persiste et redémarre à la bonne hauteur, se
+synchronise entre pairs (rattrapage + suivi en direct) et relaie les transactions
+(admission validée par le mempool, anti-écho par pair).
 
-1. `config::loadFromFile` (parseur JSON, dépendance vendorisée) ;
-2. implémentations de référence : `storage/memory`, `network/loopback` + premiers tests
-   contractuels ;
-3. module `chain` : `IChainView` sur `IKeyValueStore` + `GenesisBuilder` (genesis 100 % config) ;
-4. premier moteur : `consensus/pow`.
+1. soumission de transactions (wallet : clés + signature, puis CLI/RPC) ;
+2. vraie crypto : `crypto/secp256k1/` + vérification des signatures dans `state/` ;
+3. reorgs (`consensus.compare` + stockage des chaînes latérales) ;
+4. retargeting de la difficulté PoW ; snapshot d'état persistant au démarrage.

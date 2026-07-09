@@ -9,11 +9,12 @@
 
 namespace RSCoin::Protocol {
 
-    RSCoinProtocol::RSCoinProtocol(Network::INetwork& network, const Config::NodeConfig& config, ChainServices services)
-        : _network(network), _services(services), _version(config.protocol.version), _chainId(config.chainId) {
+    RSCoinProtocol::RSCoinProtocol(Network::INetwork& network, Settings settings, NodeServices services)
+        : _network(network), _services(services), _version(settings.version), _chainId(settings.chainId) {
         registerHandlers();
 
         _services.manager.subscribe([this](const Primitives::Block& block, Chain::ImportOrigin) { announceBlock(block); });
+        _services.mempool.subscribe([this](const Primitives::Transaction& transaction) { announceTransaction(transaction); });
     }
 
     void RSCoinProtocol::registerHandlers() {
@@ -23,6 +24,7 @@ namespace RSCoin::Protocol {
         _dispatcher.on<NewBlockMessage>([this](const auto& from, const auto& m) { handleNewBlock(from, m); });
         _dispatcher.on<GetBlocksMessage>([this](const auto& from, const auto& m) { handleGetBlocks(from, m); });
         _dispatcher.on<BlocksMessage>([this](const auto& from, const auto& m) { handleBlocks(from, m); });
+        _dispatcher.on<NewTransactionMessage>([this](const auto& from, const auto& m) { handleNewTransaction(from, m); });
     }
 
     void RSCoinProtocol::onPeerConnected(const Network::PeerId& peer) {
@@ -157,6 +159,23 @@ namespace RSCoin::Protocol {
             requestBlocks(from, _services.chain.height() + 1);
     }
 
+    void RSCoinProtocol::handleNewTransaction(const Network::PeerId& from, const NewTransactionMessage& message) {
+        const core::Hash256 hash = _services.hasher.hash(Primitives::encode(message.transaction));
+        {
+            std::lock_guard lock(_mutex);
+            auto it = _sessions.find(from);
+            if (it == _sessions.end() || !it->second.ready)
+                return;
+            if (it->second.seenTxs.size() >= kSeenTxsLimit)
+                it->second.seenTxs.clear();
+            it->second.seenTxs.insert(hash);
+        }
+
+        const auto outcome = _services.mempool.add(message.transaction);
+        if (!outcome)
+            RSCoin_WARN("mempool admission failed: {}", outcome.error().describe());
+    }
+
     void RSCoinProtocol::importFrom(const Network::PeerId& from, const Primitives::Block& block) {
         auto outcome = _services.manager.importBlock(block, Chain::ImportOrigin::remote);
         if (!outcome) {
@@ -197,6 +216,29 @@ namespace RSCoin::Protocol {
         for (const auto& peer : targets) {
             (void)Protocol::send(_network, peer, message);
         }
+    }
+
+    void RSCoinProtocol::announceTransaction(const Primitives::Transaction& transaction) {
+        const core::Hash256 hash = _services.hasher.hash(Primitives::encode(transaction));
+
+        std::vector<Network::PeerId> targets;
+        {
+            std::lock_guard lock(_mutex);
+            for (auto& [peer, session] : _sessions) {
+                if (!session.ready || session.seenTxs.contains(hash))
+                    continue;
+                if (session.seenTxs.size() >= kSeenTxsLimit)
+                    session.seenTxs.clear();
+                session.seenTxs.insert(hash);
+                targets.push_back(peer);
+            }
+        }
+
+        if (targets.empty())
+            return;
+        const NewTransactionMessage message{transaction};
+        for (const auto& peer : targets)
+            (void)Protocol::send(_network, peer, message);
     }
 
     void RSCoinProtocol::requestBlocks(const Network::PeerId& peer, std::uint64_t fromHeight) {

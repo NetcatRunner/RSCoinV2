@@ -14,6 +14,9 @@ namespace RSCoin::Protocol {
         inline constexpr std::uint16_t kNewBlock = 0x0100;
         inline constexpr std::uint16_t kGetBlocks = 0x0101;
         inline constexpr std::uint16_t kBlocks = 0x0102;
+
+        // 0x02xx : transactions
+        inline constexpr std::uint16_t kNewTransaction = 0x0200;
     }
 
 }

@@ -1,5 +1,7 @@
 {
-    "chainId": 1337,
+    "chain": {
+        "id": 1337
+    },
     "genesis": {
         "timestamp": 1751980800,
         "allocations": [
@@ -24,7 +26,7 @@
     },
     "network": {
         "transport": "tcp",
-        "listenAddress": "127.0.0.1",
+        "listenAddress": "0.0.0.0",
         "port": 30303,
         "maxPeers": 32,
         "maxMessageBytes": 4000000,

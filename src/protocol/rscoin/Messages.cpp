@@ -87,6 +87,22 @@ namespace RSCoin::Protocol {
         return writer.take();
     }
 
+    core::Bytes NewTransactionMessage::encode() const {
+        return Writer{}.writeBytes(Primitives::encode(transaction)).take();
+    }
+
+    core::Result<NewTransactionMessage> NewTransactionMessage::decode(core::BytesView payload) {
+        Reader reader(payload);
+        const auto raw = reader.readBytes();
+        if (!raw || !reader.finished())
+            return malformed("new-transaction");
+
+        auto transaction = Primitives::decodeTransaction(*raw);
+        if (!transaction)
+            return core::fail(transaction.error(), "malformed new-transaction message");
+        return NewTransactionMessage{std::move(*transaction)};
+    }
+
     core::Result<BlocksMessage> BlocksMessage::decode(core::BytesView payload) {
         Reader reader(payload);
         const auto count = reader.read<std::uint32_t>();

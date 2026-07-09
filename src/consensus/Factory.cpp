@@ -1,10 +1,10 @@
-#include "consensus/EngineFactory.hpp"
+#include "consensus/Factory.hpp"
 
 #include "consensus/pow/PowEngine.hpp"
 
 namespace RSCoin::Consensus {
 
-    core::Result<std::unique_ptr<IConsensus>> makeEngine(const Config::ConsensusConfig& config, const Crypto::ICryptoProvider& crypto) {
+    core::Result<std::unique_ptr<IConsensus>> makeEngine(const ConsensusConfig& config, const Crypto::ICryptoProvider& crypto) {
         if (config.engine == "pow") {
             auto engine = PowEngine::create(config.parameters, crypto.hasher());
             if (!engine)

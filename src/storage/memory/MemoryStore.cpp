@@ -1,4 +1,4 @@
-#include "storage/MemoryStore.hpp"
+#include "storage/memory/MemoryStore.hpp"
 
 namespace RSCoin::Storage {
 

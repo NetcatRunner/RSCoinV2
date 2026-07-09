@@ -11,10 +11,10 @@
 #include <string>
 #include <functional>
 
-#include "config/NodeConfig.hpp"
+#include "network/NetworkConfig.hpp"
 #include "network/INetwork.hpp"
-#include "network/Peer.hpp"
-#include "network/Socket.hpp"
+#include "network/tcp/Peer.hpp"
+#include "network/tcp/Socket.hpp"
 
 namespace std {
     template <>
@@ -30,7 +30,7 @@ namespace RSCoin::Network {
 
     class TcpNetwork : public INetwork {
     public:
-        TcpNetwork(Config::NetworkConfig config);
+        TcpNetwork(NetworkConfig config);
         ~TcpNetwork() override;
 
         core::Result<void> start(INetworkObserver& observer) override;
@@ -52,7 +52,7 @@ namespace RSCoin::Network {
         void removePeer(const PeerId& id);
         std::shared_ptr<Peer> findPeer(const PeerId& id) const;
 
-        Config::NetworkConfig _config;
+        NetworkConfig _config;
         INetworkObserver* _observer = nullptr;
         std::atomic<bool> _running{false};
 

@@ -68,4 +68,13 @@ namespace RSCoin::Protocol {
         static core::Result<BlocksMessage> decode(core::BytesView payload);
     };
 
+    struct NewTransactionMessage {
+        static constexpr std::uint16_t kTopic = Topics::kNewTransaction;
+
+        Primitives::Transaction transaction;
+
+        core::Bytes encode() const;
+        static core::Result<NewTransactionMessage> decode(core::BytesView payload);
+    };
+
 }

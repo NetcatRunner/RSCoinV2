@@ -4,13 +4,15 @@
 
 #include <RST/parser/ArgParser.hpp>
 
+#include "chain/ChainConfig.hpp"
 #include "chain/Factory.hpp"
 #include "chain/Genesis.hpp"
-#include "config/NodeConfig.hpp"
-#include "consensus/EngineFactory.hpp"
+#include "config/Store.hpp"
+#include "consensus/Factory.hpp"
 #include "crypto/Factory.hpp"
 #include "log/Logger.hpp"
 #include "mempool/Factory.hpp"
+#include "mining/Factory.hpp"
 #include "network/Factory.hpp"
 #include "node/Node.hpp"
 #include "protocol/Factory.hpp"
@@ -44,27 +46,47 @@ namespace {
         return std::filesystem::path{parser.getOption<std::string>("--config")};
     }
 
-    RSCoin::core::Result<RSCoin::Node::Modules> buildModules(const RSCoin::Config::NodeConfig& config) {
+    RSCoin::core::Result<RSCoin::Node::Modules> buildModules(const RSCoin::Config::Store& store) {
         using namespace RSCoin;
 
-        auto crypto = Crypto::makeProvider(config.crypto);
+        auto chainConfig = store.get<Chain::ChainConfig>();
+        if (!chainConfig)
+            return core::fail(chainConfig.error());
+
+        auto cryptoConfig = store.get<Crypto::CryptoConfig>();
+        if (!cryptoConfig)
+            return core::fail(cryptoConfig.error());
+        auto crypto = Crypto::makeProvider(*cryptoConfig);
         if (!crypto)
             return core::fail(crypto.error());
 
-        auto storage = Storage::makeStore(config.storage);
+        auto storageConfig = store.get<Storage::StorageConfig>();
+        if (!storageConfig)
+            return core::fail(storageConfig.error());
+        auto storage = Storage::makeStore(*storageConfig);
         if (!storage)
             return core::fail(storage.error());
 
-        auto state = State::makeStateMachine(**crypto, config);
+        auto genesisConfig = store.get<Chain::GenesisConfig>();
+        if (!genesisConfig)
+            return core::fail(genesisConfig.error());
+        auto stateConfig = store.get<State::StateConfig>();
+        if (!stateConfig)
+            return core::fail(stateConfig.error());
+
+        auto state = State::makeStateMachine(**crypto, *stateConfig, *genesisConfig);
         if (!state)
             return core::fail(state.error());
 
-        const Primitives::Block genesis = Chain::buildGenesis(config.genesis, (*state)->stateRoot());
+        const Primitives::Block genesis = Chain::buildGenesis(*genesisConfig, (*state)->stateRoot());
         auto chain = Chain::makeBlockchain(**storage, (*crypto)->hasher(), genesis);
         if (!chain)
             return core::fail(chain.error());
 
-        auto consensus = Consensus::makeEngine(config.consensus, **crypto);
+        auto consensusConfig = store.get<Consensus::ConsensusConfig>();
+        if (!consensusConfig)
+            return core::fail(consensusConfig.error());
+        auto consensus = Consensus::makeEngine(*consensusConfig, **crypto);
         if (!consensus)
             return core::fail(consensus.error());
 
@@ -72,43 +94,65 @@ namespace {
         if (!manager)
             return core::fail(manager.error());
 
-        auto network = Network::makeNetwork(config.network);
+        auto mempool = Mempool::makeMempool(**manager);
+        if (!mempool)
+            return core::fail(mempool.error());
+
+        auto networkConfig = store.get<Network::NetworkConfig>();
+        if (!networkConfig)
+            return core::fail(networkConfig.error());
+        auto network = Network::makeNetwork(*networkConfig);
         if (!network)
             return core::fail(network.error());
 
-        auto protocol = Protocol::makeProtocol(config, **network, Protocol::ChainServices{**chain, **manager, (*crypto)->hasher()});
+        auto protocolConfig = store.get<Protocol::ProtocolConfig>();
+        if (!protocolConfig)
+            return core::fail(protocolConfig.error());
+        auto protocol = Protocol::makeProtocol(*protocolConfig, chainConfig->id, **network, Protocol::NodeServices{**chain, **manager, (*crypto)->hasher(), **mempool});
         if (!protocol)
             return core::fail(protocol.error());
 
-        auto mempool = Mempool::makeMempool();
-        if (!mempool)
-            return core::fail(mempool.error());
+        auto miningConfig = store.get<Mining::MiningConfig>();
+        if (!miningConfig)
+            return core::fail(miningConfig.error());
+
+        std::unique_ptr<Mining::IMiner> miner;
+        if (miningConfig->enabled) {
+            auto blockConfig = store.get<Chain::BlockConfig>();
+            if (!blockConfig)
+                return core::fail(blockConfig.error());
+
+            auto made = Mining::makeMiner(Mining::MinerDeps{**chain, **consensus, **manager, **mempool}, std::move(*miningConfig), std::move(*blockConfig));
+            if (!made)
+                return core::fail(made.error());
+            miner = std::move(*made);
+        }
+
+        RSCoin_INFO("starting node (chainId {}, consensus '{}', protocol '{}')", chainConfig->id, consensusConfig->engine, protocolConfig->name);
 
         return Node::Modules{
             .crypto = std::move(*crypto),
             .storage = std::move(*storage),
             .chain = std::move(*chain),
             .consensus = std::move(*consensus),
+            .mempool = std::move(*mempool),
             .manager = std::move(*manager),
             .network = std::move(*network),
             .protocol = std::move(*protocol),
-            .mempool = std::move(*mempool),
+            .miner = std::move(miner),
         };
     }
 
     RSCoin::core::Result<void> runNode(const std::filesystem::path& configPath) {
+        auto store = RSCoin::Config::Store::load(configPath);
+        if (!store)
+            return RSCoin::core::fail(store.error(), "loading '" + configPath.string() + "'");
 
-        auto config = RSCoin::Config::loadFromFile(configPath);
-        if (!config)
-            return RSCoin::core::fail(config.error(), "loading '" + configPath.string() + "'");
-
-        auto modules = buildModules(*config);
+        auto modules = buildModules(*store);
         if (!modules)
             return RSCoin::core::fail(modules.error());
 
-        RSCoin_INFO("starting node (chainId {}, consensus '{}', protocol '{}')", config->chainId, config->consensus.engine, config->protocol.name);
-
-        RSCoin::Node::Node node{std::move(*modules), std::move(*config)};
+        RSCoin::Node::Node node{std::move(*modules)};
         return node.run(RSCoin::Utils::stopSource().get_token());
     }
 }

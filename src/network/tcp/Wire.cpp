@@ -1,4 +1,4 @@
-#include "network/Wire.hpp"
+#include "network/tcp/Wire.hpp"
 
 namespace RSCoin::Network {
 

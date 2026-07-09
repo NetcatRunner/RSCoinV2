@@ -1,10 +1,10 @@
 #include "network/Factory.hpp"
 
-#include "network/TcpNetwork.hpp"
+#include "network/tcp/TcpNetwork.hpp"
 
 namespace RSCoin::Network {
 
-    core::Result<std::unique_ptr<INetwork>> makeNetwork(const Config::NetworkConfig& config) {
+    core::Result<std::unique_ptr<INetwork>> makeNetwork(const NetworkConfig& config) {
         if (config.transport == "tcp")
             return std::make_unique<TcpNetwork>(config);
 

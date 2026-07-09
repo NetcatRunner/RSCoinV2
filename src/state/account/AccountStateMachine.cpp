@@ -1,10 +1,10 @@
-#include "state/AccountStateMachine.hpp"
+#include "state/account/AccountStateMachine.hpp"
 
 #include <cstdint>
 
 namespace RSCoin::State {
 
-    AccountStateMachine::AccountStateMachine(const Crypto::IHasher& hasher, const Config::StateConfig& rules, const Config::GenesisConfig& genesis)
+    AccountStateMachine::AccountStateMachine(const Crypto::IHasher& hasher, const StateConfig& rules, const Chain::GenesisConfig& genesis)
         : _hasher(hasher), _blockReward(rules.blockReward) {
         for (const auto& allocation : genesis.allocations)
             _accounts[allocation.address] = Account{allocation.balance, 0};

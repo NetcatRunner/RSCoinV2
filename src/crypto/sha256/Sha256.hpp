@@ -66,10 +66,10 @@ namespace RSCoin::Crypto {
             0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
         };
 
-        std::uint8_t  m_data[64]{};
-        std::uint32_t m_blocklen{0};
-        std::uint64_t m_bitlen{0};
-        std::uint32_t m_state[8]{};
+        std::uint8_t _data[64]{};
+        std::uint32_t _blocklen{0};
+        std::uint64_t _bitlen{0};
+        std::uint32_t _state[8]{};
 
         static constexpr std::uint32_t rotr(std::uint32_t x, std::uint32_t n) noexcept;
         static constexpr std::uint32_t choose(std::uint32_t e, std::uint32_t f, std::uint32_t g) noexcept;
