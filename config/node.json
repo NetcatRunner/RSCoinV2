@@ -6,7 +6,6 @@
         "maxPeers": 32,
         "maxMessageBytes": 4000000,
         "bootstrapPeers": [
-            
         ]
     },
     "storage": {
