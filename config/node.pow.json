@@ -5,7 +5,7 @@
     "genesis": {
         "timestamp": 1751980800,
         "allocations": [
-            { "address": "0x0000000000000000000000000000000000000001", "balance": 1000000000 }
+            { "address": "0xcb8aa3e296e96a08512e0812902118c6cb586ee3", "balance": 1000000000 }
         ],
         "consensusSeal": "0x00"
     },
@@ -35,6 +35,15 @@
     "protocol": {
         "name": "rscoin",
         "version": 1
+    },
+    "rpc": {
+        "enabled": true,
+        "transport": "http",
+        "listenAddress": "127.0.0.1",
+        "port": 8545
+    },
+    "wallet": {
+        "keystoreDirectory": "data/wallet"
     },
     "storage": {
         "backend": "file",

@@ -18,6 +18,14 @@ namespace RSCoin::Node {
         if (!started)
             return started;
 
+        if (_modules.rpc) {
+            auto rpcStarted = _modules.rpc->start();
+            if (!rpcStarted) {
+                _modules.network->stop();
+                return rpcStarted;
+            }
+        }
+
         if (_modules.miner)
             _modules.miner->start();
 
@@ -29,6 +37,8 @@ namespace RSCoin::Node {
 
         if (_modules.miner)
             _modules.miner->stop();
+        if (_modules.rpc)
+            _modules.rpc->stop();
         _modules.network->stop();
         return {};
     }

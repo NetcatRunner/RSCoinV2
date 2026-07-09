@@ -3,18 +3,25 @@
 #include <map>
 
 #include "chain/GenesisConfig.hpp"
-#include "state/StateConfig.hpp"
 #include "crypto/ICrypto.hpp"
 #include "state/IStateMachine.hpp"
+#include "state/StateConfig.hpp"
 
 namespace RSCoin::State {
 
     class AccountStateMachine : public IStateMachine {
     public:
-        AccountStateMachine(const Crypto::IHasher& hasher, const StateConfig& rules, const Chain::GenesisConfig& genesis);
+        struct Context {
+            const Crypto::IHasher& hasher;
+            const Crypto::ISignatureScheme& signatures;
+            std::uint64_t chainId{};
+        };
+
+        AccountStateMachine(Context context, const StateConfig& rules, const Chain::GenesisConfig& genesis);
 
         core::Result<void> validateTransaction(const Primitives::Transaction& transaction) const override;
         core::Result<std::unique_ptr<IStateMachine>> apply(const Primitives::Block& block) const override;
+        std::optional<AccountView> account(const core::Address& address) const override;
         core::Hash256 stateRoot() const override;
 
     private:
@@ -25,12 +32,12 @@ namespace RSCoin::State {
 
         using Accounts = std::map<core::Address, Account>;
 
-        AccountStateMachine(const Crypto::IHasher& hasher, core::Amount blockReward, Accounts accounts)
-            : _hasher(hasher), _blockReward(blockReward), _accounts(std::move(accounts)) {}
+        AccountStateMachine(Context context, core::Amount blockReward, Accounts accounts)
+            : _context(context), _blockReward(blockReward), _accounts(std::move(accounts)) {}
 
-        static core::Result<void> validateAgainst(const Accounts& accounts, const Primitives::Transaction& transaction);
+        core::Result<void> validateAgainst(const Accounts& accounts, const Primitives::Transaction& transaction) const;
 
-        const Crypto::IHasher& _hasher;
+        Context _context;
         core::Amount _blockReward;
         Accounts _accounts;
     };

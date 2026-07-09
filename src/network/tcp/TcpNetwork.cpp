@@ -35,7 +35,7 @@ namespace RSCoin::Network {
             return core::fail(core::ErrorCode::network, "transport already started");
         _observer = &observer;
 
-        auto listener = Socket::listen({_config.listenAddress, _config.port});
+        auto listener = Socket::listen(_config.listenAddress, _config.port);
         if (!listener) {
             _running = false;
             return core::fail(listener.error(), "starting transport");
@@ -83,7 +83,7 @@ namespace RSCoin::Network {
     }
 
     core::Result<void> TcpNetwork::connect(const Endpoint& endpoint) {
-        auto socket = Socket::connect(endpoint);
+        auto socket = Socket::connect(endpoint.host, endpoint.port);
         if (!socket)
             return core::fail(socket.error());
         return addPeer(std::move(*socket));
@@ -171,8 +171,6 @@ namespace RSCoin::Network {
             _peers[peer->id] = peer;
         }
 
-        // Contrat du transport : onPeerConnected est délivré AVANT le premier
-        // onMessage du pair — le reader ne démarre qu'après la notification.
         RSCoin_INFO("peer connected: {}", peer->id.value);
         _observer->onPeerConnected(peer->id);
 

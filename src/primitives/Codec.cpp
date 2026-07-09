@@ -182,6 +182,18 @@ namespace RSCoin::Primitives {
         return writer.take();
     }
 
+    core::Bytes encodeForSigning(const Transaction& transaction, std::uint64_t chainId) {
+        ByteWriter writer;
+        writer.writeLE<std::uint8_t>(transaction.type);
+        writer.writeFixed(transaction.from);
+        writer.writeFixed(transaction.to);
+        writer.writeLE<std::uint64_t>(transaction.value.units);
+        writer.writeLE<std::uint64_t>(transaction.nonce);
+        writer.writeBytes(transaction.payload);
+        writer.writeLE<std::uint64_t>(chainId);
+        return writer.take();
+    }
+
     core::Bytes encode(const Block& block) {
         ByteWriter writer;
         writeHeaderTo(writer, block.header);

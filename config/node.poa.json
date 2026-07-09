@@ -1,5 +1,7 @@
 {
-    "chainId": 1338,
+    "chain": {
+        "id": 1338
+    },
     "genesis": {
         "timestamp": 1751980800,
         "allocations": [
@@ -35,6 +37,15 @@
     "protocol": {
         "name": "rscoin",
         "version": 1
+    },
+    "rpc": {
+        "enabled": true,
+        "transport": "http",
+        "listenAddress": "127.0.0.1",
+        "port": 8546
+    },
+    "wallet": {
+        "keystoreDirectory": "data/wallet-poa"
     },
     "storage": {
         "backend": "file",

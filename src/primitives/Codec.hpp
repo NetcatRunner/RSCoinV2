@@ -10,6 +10,8 @@ namespace RSCoin::Primitives {
     core::Bytes encode(const Transaction& transaction);
     core::Bytes encode(const Block& block);
 
+    core::Bytes encodeForSigning(const Transaction& transaction, std::uint64_t chainId);
+
     core::Result<BlockHeader> decodeHeader(core::BytesView data);
     core::Result<Transaction> decodeTransaction(core::BytesView data);
     core::Result<Block> decodeBlock(core::BytesView data);

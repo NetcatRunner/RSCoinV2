@@ -20,6 +20,7 @@ namespace RSCoin::Crypto {
         virtual core::Result<core::Signature> sign(const core::Hash256& digest, const core::PrivateKey& key) const = 0;
         virtual bool verify(const core::Hash256& digest, const core::Signature& signature, const core::PublicKey& key) const = 0;
         virtual core::Result<core::Address> deriveAddress(const core::PublicKey& key) const = 0;
+        virtual core::Result<core::Address> authenticate(const core::Hash256& digest, const core::Signature& signature) const = 0;
     };
 
     class ICryptoProvider {

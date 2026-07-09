@@ -16,6 +16,7 @@
 #include "network/Factory.hpp"
 #include "node/Node.hpp"
 #include "protocol/Factory.hpp"
+#include "rpc/Factory.hpp"
 #include "state/Factory.hpp"
 #include "storage/Factory.hpp"
 #include "utils/SignalHandler.hpp"
@@ -74,7 +75,7 @@ namespace {
         if (!stateConfig)
             return core::fail(stateConfig.error());
 
-        auto state = State::makeStateMachine(**crypto, *stateConfig, *genesisConfig);
+        auto state = State::makeStateMachine(**crypto, chainConfig->id, *stateConfig, *genesisConfig);
         if (!state)
             return core::fail(state.error());
 
@@ -112,6 +113,18 @@ namespace {
         if (!protocol)
             return core::fail(protocol.error());
 
+        auto rpcConfig = store.get<Rpc::RpcConfig>();
+        if (!rpcConfig)
+            return core::fail(rpcConfig.error());
+
+        std::unique_ptr<Rpc::IRpcServer> rpc;
+        if (rpcConfig->enabled) {
+            auto made = Rpc::makeRpcServer(*rpcConfig, Rpc::NodeServices{**chain, **manager, **mempool, **network, (*crypto)->hasher()});
+            if (!made)
+                return core::fail(made.error());
+            rpc = std::move(*made);
+        }
+
         auto miningConfig = store.get<Mining::MiningConfig>();
         if (!miningConfig)
             return core::fail(miningConfig.error());
@@ -139,6 +152,7 @@ namespace {
             .manager = std::move(*manager),
             .network = std::move(*network),
             .protocol = std::move(*protocol),
+            .rpc = std::move(rpc),
             .miner = std::move(miner),
         };
     }

@@ -1,9 +1,8 @@
 #include "crypto/Factory.hpp"
 
 #include "crypto/CryptoSuite.hpp"
+#include "crypto/secp256k1/Secp256k1Scheme.hpp"
 #include "crypto/sha256/Sha256dHasher.hpp"
-
-#include "crypto/stub/Secp256k1Scheme.hpp"
 #include "crypto/stub/InsecureStubScheme.hpp"
 
 namespace RSCoin::Crypto {
@@ -21,7 +20,7 @@ namespace RSCoin::Crypto {
         else if (config.signatureScheme == "secp256k1")
             signatures = std::make_unique<Secp256k1Scheme>(*hasher);
         else
-            return core::fail(core::ErrorCode::crypto, "unknown signature scheme: '" + config.signatureScheme + "' (secp256k1 not implemented yet)");
+            return core::fail(core::ErrorCode::crypto, "unknown signature scheme: '" + config.signatureScheme + "'");
 
         return std::make_unique<CryptoSuite>(std::move(hasher), std::move(signatures));
     }

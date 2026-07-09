@@ -11,6 +11,7 @@
 #include "mining/IMiner.hpp"
 #include "network/INetwork.hpp"
 #include "protocol/IProtocol.hpp"
+#include "rpc/IRpcServer.hpp"
 #include "storage/IStorage.hpp"
 
 namespace RSCoin::Node {
@@ -24,6 +25,7 @@ namespace RSCoin::Node {
         std::unique_ptr<Chain::IChainManager> manager;
         std::unique_ptr<Network::INetwork> network;
         std::unique_ptr<Protocol::IProtocol> protocol;
+        std::unique_ptr<Rpc::IRpcServer> rpc;
         std::unique_ptr<Mining::IMiner> miner;
     };
 }

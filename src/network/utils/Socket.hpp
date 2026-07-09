@@ -1,15 +1,17 @@
 #pragma once
 
 #include <cstddef>
+#include <cstdint>
 #include <span>
 #include <string>
 
 #include "core/Result.hpp"
 #include "core/Types.hpp"
-#include "network/INetwork.hpp"
 
 namespace RSCoin::Network {
 
+    // Socket TCP POSIX en RAII — boîte à outils du module réseau,
+    // utilisée par le transport P2P (network/tcp).
     class Socket {
     public:
         Socket() = default;
@@ -20,8 +22,8 @@ namespace RSCoin::Network {
         Socket(const Socket&) = delete;
         Socket& operator=(const Socket&) = delete;
 
-        static core::Result<Socket> listen(const Endpoint& endpoint);
-        static core::Result<Socket> connect(const Endpoint& endpoint);
+        static core::Result<Socket> listen(const std::string& host, std::uint16_t port);
+        static core::Result<Socket> connect(const std::string& host, std::uint16_t port);
 
         core::Result<Socket> accept() const;
 

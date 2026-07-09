@@ -1,4 +1,4 @@
-#include "network/tcp/Socket.hpp"
+#include "network/utils/Socket.hpp"
 
 #include <arpa/inet.h>
 #include <netdb.h>
@@ -9,7 +9,6 @@
 #include <cerrno>
 #include <cstring>
 #include <utility>
-#include <iostream>
 
 namespace RSCoin::Network {
 
@@ -18,23 +17,23 @@ namespace RSCoin::Network {
             return core::fail(core::ErrorCode::network, std::move(what) + ": " + std::strerror(errno));
         }
 
-        std::string toString(const Endpoint& endpoint) {
-            return endpoint.host + ":" + std::to_string(endpoint.port);
+        std::string toString(const std::string& host, std::uint16_t port) {
+            return host + ":" + std::to_string(port);
         }
 
-        core::Result<sockaddr_in> resolve(const Endpoint& endpoint) {
+        core::Result<sockaddr_in> resolve(const std::string& host, std::uint16_t port) {
             addrinfo hints{};
             hints.ai_family = AF_INET;
             hints.ai_socktype = SOCK_STREAM;
 
             addrinfo* results = nullptr;
-            const int status = ::getaddrinfo(endpoint.host.c_str(), nullptr, &hints, &results);
+            const int status = ::getaddrinfo(host.c_str(), nullptr, &hints, &results);
             if (status != 0 || results == nullptr)
-                return core::fail(core::ErrorCode::network, "cannot resolve host '" + endpoint.host + "': " + ::gai_strerror(status));
+                return core::fail(core::ErrorCode::network, "cannot resolve host '" + host + "': " + ::gai_strerror(status));
 
             sockaddr_in address{};
             std::memcpy(&address, results->ai_addr, sizeof(address));
-            address.sin_port = htons(endpoint.port);
+            address.sin_port = htons(port);
             ::freeaddrinfo(results);
             return address;
         }
@@ -64,8 +63,8 @@ namespace RSCoin::Network {
             ::shutdown(_fd, SHUT_RDWR);
     }
 
-    core::Result<Socket> Socket::listen(const Endpoint& endpoint) {
-        auto address = resolve(endpoint);
+    core::Result<Socket> Socket::listen(const std::string& host, std::uint16_t port) {
+        auto address = resolve(host, port);
         if (!address)
             return core::fail(address.error());
 
@@ -77,15 +76,15 @@ namespace RSCoin::Network {
         ::setsockopt(socket._fd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(enable));
 
         if (::bind(socket._fd, reinterpret_cast<const sockaddr*>(&*address), sizeof(*address)) < 0)
-            return sysFail("bind() failed on " + toString(endpoint));
+            return sysFail("bind() failed on " + toString(host, port));
         if (::listen(socket._fd, kListenBacklog) < 0)
-            return sysFail("listen() failed on " + toString(endpoint));
+            return sysFail("listen() failed on " + toString(host, port));
 
         return socket;
     }
 
-    core::Result<Socket> Socket::connect(const Endpoint& endpoint) {
-        auto address = resolve(endpoint);
+    core::Result<Socket> Socket::connect(const std::string& host, std::uint16_t port) {
+        auto address = resolve(host, port);
         if (!address)
             return core::fail(address.error());
 
@@ -94,7 +93,7 @@ namespace RSCoin::Network {
             return sysFail("socket() failed");
 
         if (::connect(socket._fd, reinterpret_cast<const sockaddr*>(&*address), sizeof(*address)) < 0)
-            return sysFail("connect() failed to " + toString(endpoint));
+            return sysFail("connect() failed to " + toString(host, port));
 
         return socket;
     }

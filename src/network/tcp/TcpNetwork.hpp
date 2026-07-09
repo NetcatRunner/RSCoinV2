@@ -14,7 +14,7 @@
 #include "network/NetworkConfig.hpp"
 #include "network/INetwork.hpp"
 #include "network/tcp/Peer.hpp"
-#include "network/tcp/Socket.hpp"
+#include "network/utils/Socket.hpp"
 
 namespace std {
     template <>

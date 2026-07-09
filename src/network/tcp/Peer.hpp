@@ -3,7 +3,7 @@
 #include <mutex>
 
 #include "network/INetwork.hpp"
-#include "network/tcp/Socket.hpp"
+#include "network/utils/Socket.hpp"
 
 namespace RSCoin::Network {
 
