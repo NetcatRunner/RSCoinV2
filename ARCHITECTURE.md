@@ -23,9 +23,10 @@ la séparation exécution/consensus d'Ethereum, le header à données de scellem
 
 **Convention** : la racine d'un module contient son **contrat** (`I*.hpp`), sa **config**
 (`*Config.hpp`, section typée du fichier JSON) et sa **Factory** (seule surface visible de
-`main.cpp`). Chaque **implémentation** vit dans un sous-dossier portant le nom de la
-variante que la config sélectionne — ajouter une variante = ajouter un dossier + une
-entrée dans la Factory, rien d'autre ne bouge.
+`main.cpp`). Chaque **implémentation** vit dans un sous-dossier : nommé d'après la
+**variante** que la config sélectionne (`tcp/`, `file/`, `pow/`…), ou d'après son **rôle**
+quand l'implémentation est canonique (`chain/manager/`, `mining/local/`). Ajouter une
+variante = ajouter un dossier + une entrée dans la Factory, rien d'autre ne bouge.
 
 ```
 RSCoin2/
@@ -56,8 +57,12 @@ RSCoin2/
     │   └── account/                #   modèle par comptes (à la Ethereum)
     ├── mempool/                    # IMempool + Factory
     │   └── simple/                 #   pool FIFO auto-nettoyant
-    ├── mining/                     # IMiner + MiningConfig + Factory + Miner (générique : pas de variante)
-    ├── chain/                      # IBlockchain/IChainManager + Blockchain/ChainManager/Genesis (canoniques)
+    ├── mining/                     # IMiner + MiningConfig + Factory
+    │   └── local/                  #   mineur local : son propre thread, seal via IConsensus
+    ├── chain/                      # IBlockchain/IChainManager/IChainView + configs + Factory
+    │   ├── kv/                     #   Blockchain : dépôt de blocs sur IKeyValueStore
+    │   ├── manager/                #   ChainManager : la voie d'écriture unique de la chaîne
+    │   └── genesis/                #   construction du bloc 0 depuis la config
     └── node/                       # le nœud — ne voit QUE les contrats
 ```
 

@@ -10,10 +10,9 @@
 
 namespace RSCoin::Consensus {
 
-    class PowEngine final : public IConsensus {
+    class PowEngine : public IConsensus {
     public:
-        static core::Result<std::unique_ptr<PowEngine>>
-        create(const std::map<std::string, std::string>& parameters, const Crypto::IHasher& hasher);
+        static core::Result<std::unique_ptr<PowEngine>> create(const std::map<std::string, std::string>& parameters, const Crypto::IHasher& hasher);
 
         std::string_view name() const noexcept override { return "pow"; }
 
@@ -26,6 +25,9 @@ namespace RSCoin::Consensus {
         PowEngine(const Crypto::IHasher& hasher, unsigned difficultyBits)
             : _hasher(hasher), _difficultyBits(difficultyBits) {}
 
+        static constexpr std::size_t kSealSize = 8;
+
+        void writeNonce(core::Bytes& seal, std::uint64_t nonce) const;
         bool meetsDifficulty(const core::Hash256& hash) const;
 
         const Crypto::IHasher& _hasher;

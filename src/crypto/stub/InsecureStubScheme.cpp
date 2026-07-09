@@ -4,10 +4,6 @@
 
 namespace RSCoin::Crypto {
 
-    namespace {
-        constexpr std::size_t kStubKeySize = 32;
-    }
-
     core::Result<core::KeyPair> InsecureStubScheme::generateKeyPair() const {
         std::random_device entropy;
 

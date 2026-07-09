@@ -4,9 +4,10 @@
 
 namespace RSCoin::Crypto {
 
-    class InsecureStubScheme : public ISignatureScheme {
+    class Secp256k1Scheme : public ISignatureScheme {
     public:
-        InsecureStubScheme(const IHasher& hasher) : _hasher(hasher) {}
+        Secp256k1Scheme(const IHasher& hasher) : _hasher(hasher) {}
+        Secp256k1Scheme();
 
         core::Result<core::KeyPair> generateKeyPair() const override;
         core::Result<core::Signature> sign(const core::Hash256& digest, const core::PrivateKey& key) const override;

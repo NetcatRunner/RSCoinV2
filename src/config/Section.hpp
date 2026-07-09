@@ -46,7 +46,7 @@ namespace RSCoin::Config {
 
     class Reader {
     public:
-        explicit Reader(const Section& section) : _section(section) {}
+        Reader(const Section& section) : _section(section) {}
 
         template <SectionValue T>
         Reader& read(std::string_view key, T& out) {

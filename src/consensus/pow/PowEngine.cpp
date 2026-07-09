@@ -6,32 +6,6 @@
 #include "primitives/Codec.hpp"
 
 namespace RSCoin::Consensus {
-
-    namespace {
-        constexpr std::size_t kSealSize = 8;
-
-        void writeNonce(core::Bytes& seal, std::uint64_t nonce) {
-            seal.resize(kSealSize);
-            for (unsigned shift = 0; shift < 64; shift += 8)
-                seal[shift / 8] = static_cast<std::byte>((nonce >> shift) & 0xFF);
-        }
-
-        unsigned leadingZeroBits(const core::Hash256& hash) {
-            unsigned bits = 0;
-            for (const std::byte b : hash.bytes) {
-                const auto value = std::to_integer<unsigned>(b);
-                if (value == 0) {
-                    bits += 8;
-                    continue;
-                }
-                for (unsigned mask = 0x80; mask != 0 && (value & mask) == 0; mask >>= 1)
-                    ++bits;
-                break;
-            }
-            return bits;
-        }
-    }
-
     core::Result<std::unique_ptr<PowEngine>> PowEngine::create(const std::map<std::string, std::string>& parameters, const Crypto::IHasher& hasher) {
         const auto it = parameters.find("difficultyBits");
         if (it == parameters.end())
@@ -46,14 +20,30 @@ namespace RSCoin::Consensus {
     }
 
     bool PowEngine::meetsDifficulty(const core::Hash256& hash) const {
-        return leadingZeroBits(hash) >= _difficultyBits;
+        unsigned bits = 0;
+        for (const std::byte b : hash.bytes) {
+            const auto value = std::to_integer<unsigned>(b);
+            if (value == 0) {
+                bits += 8;
+                continue;
+            }
+            for (unsigned mask = 0x80; mask != 0 && (value & mask) == 0; mask >>= 1)
+                ++bits;
+            break;
+        }
+        return bits >= _difficultyBits;
+    }
+
+    void PowEngine::writeNonce(core::Bytes& seal, std::uint64_t nonce) const {
+        seal.resize(kSealSize);
+        for (unsigned shift = 0; shift < 64; shift += 8)
+            seal[shift / 8] = static_cast<std::byte>((nonce >> shift) & 0xFF);
     }
 
     core::Result<void> PowEngine::verify(const Primitives::BlockHeader& header, const Chain::IChainView& chain) const {
         auto parent = chain.headerByHash(header.parentHash);
         if (!parent)
             return core::fail(core::ErrorCode::consensus, "unknown parent block");
-
         if (header.height != parent->height + 1)
             return core::fail(core::ErrorCode::consensus, "height does not follow parent");
         if (header.timestamp <= parent->timestamp)

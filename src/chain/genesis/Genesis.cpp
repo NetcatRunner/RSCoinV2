@@ -1,4 +1,4 @@
-#include "chain/Genesis.hpp"
+#include "chain/genesis/Genesis.hpp"
 
 namespace RSCoin::Chain {
 

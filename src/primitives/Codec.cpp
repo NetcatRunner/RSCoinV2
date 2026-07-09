@@ -50,8 +50,7 @@ namespace RSCoin::Primitives {
                     return core::fail(size.error());
                 if (_offset + *size > _data.size())
                     return core::fail(core::ErrorCode::validation, "truncated encoding");
-                core::Bytes out(_data.begin() + static_cast<std::ptrdiff_t>(_offset),
-                                _data.begin() + static_cast<std::ptrdiff_t>(_offset + *size));
+                core::Bytes out(_data.begin() + static_cast<std::ptrdiff_t>(_offset), _data.begin() + static_cast<std::ptrdiff_t>(_offset + *size));
                 _offset += *size;
                 return out;
             }

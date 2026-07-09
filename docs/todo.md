@@ -1,6 +1,7 @@
 - Creer des tests
 - netoyer un peut les fonction dans namespace anonyme
-- Faire des sous dossier pour rendre l'arborescence et structure un peu plus propre (pour chain/ mining/)
+- Faire des sous dossier pour rendre l'arborescence et structure un peu plus propre (pour chain/ mining/) en gardant une structure uniforme
+- Fix fast miner sigint
 
 - Un moyen de créer de Tx (wallet : génération de clés, signature, envoi — ou une RPC).
 - Vraie crypto secp256k1 — le schéma actuel est insecure-stub (la clé publique révèle la privée). Tant que c'est là, n'importe qui peut voler n'importe qui.

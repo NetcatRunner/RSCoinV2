@@ -1,6 +1,6 @@
 #include "mining/Factory.hpp"
 
-#include "mining/Miner.hpp"
+#include "mining/local/Miner.hpp"
 
 namespace RSCoin::Mining {
 

@@ -1,4 +1,4 @@
-#include "mining/Miner.hpp"
+#include "mining/local/Miner.hpp"
 
 #include <chrono>
 #include <utility>
@@ -41,7 +41,8 @@ namespace RSCoin::Mining {
 
     void Miner::miningLoop(std::stop_token cancel) {
         while (!cancel.stop_requested()) {
-            if (auto mined = mineOne(cancel); !mined && mined.error().code != core::ErrorCode::cancelled) {
+            auto mined = mineOne(cancel);
+            if (!mined && mined.error().code != core::ErrorCode::cancelled) {
                 RSCoin_WARN("mining failed: {}", mined.error().describe());
                 std::this_thread::sleep_for(kRetryDelay);
             }

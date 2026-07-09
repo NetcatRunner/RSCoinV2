@@ -6,7 +6,7 @@
 
 #include "chain/ChainConfig.hpp"
 #include "chain/Factory.hpp"
-#include "chain/Genesis.hpp"
+#include "chain/genesis/Genesis.hpp"
 #include "config/Store.hpp"
 #include "consensus/Factory.hpp"
 #include "crypto/Factory.hpp"

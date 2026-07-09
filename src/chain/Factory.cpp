@@ -1,7 +1,7 @@
 #include "chain/Factory.hpp"
 
-#include "chain/Blockchain.hpp"
-#include "chain/ChainManager.hpp"
+#include "chain/kv/Blockchain.hpp"
+#include "chain/manager/ChainManager.hpp"
 
 namespace RSCoin::Chain {
 
