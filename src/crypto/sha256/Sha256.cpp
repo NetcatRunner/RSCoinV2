@@ -146,11 +146,9 @@ namespace RSCoin::Crypto {
     }
 
     void Sha256::revert(Digest& hash) const noexcept {
-        for (std::uint8_t i = 0; i < 4; ++i) {
-            for (std::uint8_t j = 0; j < 8; ++j) {
-                hash[i + j * 4] = static_cast<std::uint8_t>(
-                    (_state[j] >> (24 - i * 8)) & 0xff
-                );
+        for (std::size_t i = 0; i < 4; ++i) {
+            for (std::size_t j = 0; j < 8; ++j) {
+                hash[i + j * 4] = static_cast<std::uint8_t>( (_state[j] >> (24 - i * 8)) & 0xff );
             }
         }
     }

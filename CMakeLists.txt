@@ -38,5 +38,8 @@ target_compile_options(${PROJECT_NAME}
         -Wpedantic
         -Wshadow
         -Wconversion
+        -Wsign-conversion
+        -Wcast-align
+        -Wvla
         -Wnon-virtual-dtor
 )
