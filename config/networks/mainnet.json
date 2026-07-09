@@ -1,0 +1,34 @@
+{
+    "chain": {
+        "id": 1337
+    },
+    "genesis": {
+        "timestamp": 1751980800,
+        "allocations": [
+            { "address": "0x716979c557370daaaa0d0975a5714632325446ff", "balance": 1000000000 }
+        ],
+        "consensusSeal": "0x00"
+    },
+    "block": {
+        "maxTransactions": 5000,
+        "maxExtraDataBytes": 32,
+        "enabledExtensions": []
+    },
+    "consensus": {
+        "engine": "pow",
+        "parameters": {
+            "difficultyBits": "20"
+        }
+    },
+    "crypto": {
+        "hasher": "sha256d",
+        "signatureScheme": "insecure-stub"
+    },
+    "state": {
+        "blockReward": 50
+    },
+    "protocol": {
+        "name": "rscoin",
+        "version": 1
+    }
+}

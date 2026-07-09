@@ -20,7 +20,8 @@ namespace {
 
     using namespace RSCoin;
 
-    constexpr const char* kDefaultConfigPath = "config/node.pow.json";
+    constexpr const char* kDefaultNetworkPath = "config/networks/mainnet.json";
+    constexpr const char* kDefaultConfigPath = "config/node.json";
     constexpr const char* kProgramName = "rscoin-wallet";
 
     struct Context {
@@ -31,26 +32,26 @@ namespace {
         std::uint64_t chainId{};
     };
 
-    core::Result<Context> buildContext(const Config::Store& store) {
-        auto chainConfig = store.get<Chain::ChainConfig>();
+    core::Result<Context> buildContext(const Config::Store& network, const Config::Store& node) {
+        auto chainConfig = network.get<Chain::ChainConfig>();
         if (!chainConfig)
             return core::fail(chainConfig.error());
 
-        auto cryptoConfig = store.get<Crypto::CryptoConfig>();
+        auto cryptoConfig = network.get<Crypto::CryptoConfig>();
         if (!cryptoConfig)
             return core::fail(cryptoConfig.error());
         auto crypto = Crypto::makeProvider(*cryptoConfig);
         if (!crypto)
             return core::fail(crypto.error());
 
-        auto walletConfig = store.get<Wallet::WalletConfig>();
+        auto walletConfig = node.get<Wallet::WalletConfig>();
         if (!walletConfig)
             return core::fail(walletConfig.error());
         auto keystore = Storage::makeStore(Storage::StorageConfig{"file", walletConfig->keystoreDirectory});
         if (!keystore)
             return core::fail(keystore.error(), "opening keystore");
 
-        auto rpcConfig = store.get<Rpc::RpcConfig>();
+        auto rpcConfig = node.get<Rpc::RpcConfig>();
         if (!rpcConfig)
             return core::fail(rpcConfig.error());
 
@@ -156,7 +157,8 @@ namespace {
 
     void initParser(RST::Parser::ArgParser& parser) {
         parser.addFlag({"--help", "-h"}, "Display this help message");
-        parser.addOption({"--config", "-c"}, "Path to the node configuration file", kDefaultConfigPath);
+        parser.addOption({"--network", "-n"}, "Path to the network definition file (shared by all peers)", kDefaultNetworkPath);
+        parser.addOption({"--config", "-c"}, "Path to the personal node configuration file", kDefaultConfigPath);
         parser.addFlag({"--new"}, "Create a new account");
         parser.addFlag({"--list"}, "List the keystore accounts");
         parser.addOption({"--balance"}, "Show balance and nonce of an address", "");
@@ -167,10 +169,13 @@ namespace {
     }
 
     core::Result<void> runCommand(RST::Parser::ArgParser& parser) {
-        auto store = Config::Store::load(parser.getOption<std::string>("--config"));
-        if (!store)
-            return core::fail(store.error());
-        auto context = buildContext(*store);
+        auto network = Config::Store::load(parser.getOption<std::string>("--network"));
+        if (!network)
+            return core::fail(network.error());
+        auto node = Config::Store::load(parser.getOption<std::string>("--config"));
+        if (!node)
+            return core::fail(node.error());
+        auto context = buildContext(*network, *node);
         if (!context)
             return core::fail(context.error());
 

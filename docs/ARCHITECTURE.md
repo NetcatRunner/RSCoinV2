@@ -33,9 +33,12 @@ RSCoin2/
 ├── CMakeLists.txt                  # unique : GLOB_RECURSE src/*.cpp → exécutable RSCoin2
 ├── ARCHITECTURE.md
 ├── config/
-│   └── node.pow.json               # tout le nœud vient d'ici (genesis compris)
+│   ├── networks/                   # LE RÉSEAU, partagé entre pairs (l'avoir en commun = même chaîne) :
+│   │   ├── mainnet.json            #   chain, genesis, block, consensus, crypto, state, protocol
+│   │   └── testnet.json
+│   └── node.json                   # TOI (gitignoré) : network (p2p), storage, rpc, wallet, mining
 └── src/
-    ├── main.cpp                    # composition root : seul endroit où les concrets sont assemblés
+    ├── main.cpp                    # point d'entrée : CLI + fichiers de config + run — rien d'autre
     ├── core/                       # Types, Result (std::expected), Hex — n'inclut RIEN d'autre
     ├── primitives/                 # Block, Transaction, Codec canonique — n'inclut que core/
     ├── config/                     # Store (get<T>() unique) + Section/Reader (façade sans JSON)
@@ -72,7 +75,7 @@ RSCoin2/
     │   ├── local/                  #   wallet logiciel local (hardware/remote = frères futurs)
     │   ├── keystore/               #   clés sur IKeyValueStore (⚠ en clair, chiffrement à venir)
     │   └── cli/                    #   main.cpp du binaire wallet
-    └── node/                       # le nœud — ne voit QUE les contrats
+    └── node/                       # Node (cycle de vie, contrats uniquement) + Factory = LA composition root
 ```
 
 ## Graphe de dépendances (règle d'or)
@@ -81,14 +84,15 @@ La discipline se lit dans les `#include` (chemins relatifs à `src/`) : **la rac
 d'un module est son API publique** (contrats `I*.hpp`, configs, Factory, boîte à
 outils comme `network/Socket` ou `protocol/Dispatcher`) — **ses sous-dossiers sont
 privés**, jamais inclus depuis un autre module (`network/tcp/…`, `consensus/pow/…`).
-Les `Factory` restent réservées aux composition roots (`main.cpp`, `wallet/cli/`).
+Les `Factory` restent réservées aux composition roots (`node/Factory`, `wallet/cli/`).
 
 - `core/` → rien ; `primitives/` → `core/` ; `config/` → `core/` ; `log/`, `utils/` → infrastructure
 - modules d'implémentation (`crypto/`, `storage/`, `network/`, `protocol/`, `consensus/`,
   `state/`, `mempool/`, `chain/`) → `core/` + `primitives/` + `config/` + `log/` +
   les `I*.hpp` des autres modules
 - `node/` → les contrats uniquement — **jamais un type concret**
-- `main.cpp` → `node/` + les factories — **seul endroit où les concrets existent**
+- `node/Factory` → toutes les factories — **la composition root, seul endroit où les concrets
+  sont assemblés** ; `main.cpp` n'est que le point d'entrée (CLI, logs, signaux)
 
 ## Réseau et protocole : deux couches, deux contrats
 
@@ -127,11 +131,26 @@ bloc ; le protocole ne sait pas ce qu'est une socket.
   expose la racine d'état. Totalement ignorante du consensus (séparation
   exécution/consensus, comme Ethereum).
 
+## Réseau vs nœud : deux fichiers, deux rôles
+
+Le modèle geth/substrate : un fichier **réseau** (`config/networks/*.json`) contient
+tout ce qui définit le consensus — le partager à l'identique, c'est être sur la même
+chaîne (créer un réseau privé = écrire un fichier et l'envoyer à ses pairs). Le
+fichier **personnel** (`config/node.json`, gitignoré) contient ce qui n'appartient
+qu'à ce nœud : ports, pairs d'amorçage, stockage, RPC, keystore, minage. La
+composition root charge les deux Stores et lit chaque section dans le bon — aucun
+module ne connaît cette séparation.
+
+```
+./RSCoin2       --network config/networks/mainnet.json  -c config/node.json   (= défauts)
+./rscoin-wallet --network config/networks/testnet.json  -c config/node.json
+```
+
 ## Le test du consensus
 
-1. `./RSCoin2 config/node.pow.json` → nœud PoW.
-2. `./RSCoin2 config/node.poa.json` → nœud PoA. **Aucune recompilation, zéro ligne
-   de code modifiée** : seule la valeur `consensus.engine` diffère.
+1. `./RSCoin2 -n config/networks/mainnet.json` → nœud PoW.
+2. `./RSCoin2 -n config/networks/testnet.json` → autre moteur. **Aucune
+   recompilation, zéro ligne de code modifiée** : seul le fichier réseau diffère.
 3. Ajouter un moteur = créer `src/consensus/<nom>/` + une entrée dans
    `consensus/Factory`. Rien d'autre ne bouge.
 

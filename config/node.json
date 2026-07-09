@@ -1,0 +1,29 @@
+{
+    "network": {
+        "transport": "tcp",
+        "listenAddress": "0.0.0.0",
+        "port": 30303,
+        "maxPeers": 32,
+        "maxMessageBytes": 4000000,
+        "bootstrapPeers": [
+            
+        ]
+    },
+    "storage": {
+        "backend": "file",
+        "directory": "data/pow"
+    },
+    "rpc": {
+        "enabled": true,
+        "transport": "http",
+        "listenAddress": "127.0.0.1",
+        "port": 8545
+    },
+    "wallet": {
+        "keystoreDirectory": "data/wallet"
+    },
+    "mining": {
+        "enabled": true,
+        "beneficiary": "0x00000000000000000000000000000000000000aa"
+    }
+}

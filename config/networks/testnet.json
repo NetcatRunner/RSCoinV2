@@ -24,37 +24,11 @@
         "hasher": "sha256d",
         "signatureScheme": "insecure-stub"
     },
-    "network": {
-        "transport": "tcp",
-        "listenAddress": "0.0.0.0",
-        "port": 30303,
-        "maxPeers": 32,
-        "maxMessageBytes": 4000000,
-        "bootstrapPeers": [
-        ]
+    "state": {
+        "blockReward": 1
     },
     "protocol": {
         "name": "rscoin",
         "version": 1
-    },
-    "rpc": {
-        "enabled": true,
-        "transport": "http",
-        "listenAddress": "127.0.0.1",
-        "port": 8545
-    },
-    "wallet": {
-        "keystoreDirectory": "data/wallet"
-    },
-    "storage": {
-        "backend": "file",
-        "directory": "data/pow"
-    },
-    "state": {
-        "blockReward": 50
-    },
-    "mining": {
-        "enabled": true,
-        "beneficiary": "0x00000000000000000000000000000000000000aa"
     }
 }
