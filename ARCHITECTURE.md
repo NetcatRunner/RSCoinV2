@@ -43,12 +43,13 @@ RSCoin2/
     ├── utils/                      # SignalHandler…
     ├── crypto/                     # ICrypto + CryptoConfig + Factory
     │   ├── sha256/                 #   hasher "sha256d" (+ algorithme SHA-256)
-    │   └── stub/                   #   schéma "insecure-stub" (secp256k1/ à venir)
+    │   ├── secp256k1/              #   schéma "secp256k1" (ECDSA, libsecp256k1)
+    │   └── stub/                   #   schéma "insecure-stub" (dev uniquement)
     ├── storage/                    # IStorage + StorageConfig + Factory
     │   ├── memory/                 #   backend "memory"
     │   └── file/                   #   backend "file"
-    ├── network/                    # TRANSPORT : des octets, aucune sémantique
-    │   └── tcp/                    #   transport "tcp" (TcpNetwork, Socket, Wire, Peer)
+    ├── network/                    # TRANSPORT : des octets, aucune sémantique (+ Socket, boîte à outils)
+    │   └── tcp/                    #   transport "tcp" (TcpNetwork, Wire, Peer)
     ├── protocol/                   # SÉMANTIQUE : IProtocol + boîte à outils (Message, Dispatcher, Codec)
     │   └── rscoin/                 #   protocole "rscoin" (Status, blocs, transactions, ping/pong)
     ├── consensus/                  # IConsensus + ConsensusConfig + Factory
@@ -63,14 +64,24 @@ RSCoin2/
     │   ├── kv/                     #   Blockchain : dépôt de blocs sur IKeyValueStore
     │   ├── manager/                #   ChainManager : la voie d'écriture unique de la chaîne
     │   └── genesis/                #   construction du bloc 0 depuis la config
+    ├── rpc/                        # INodeApi (l'API, typée) + IRpcServer + ITransport (coutures) + Api (DTOs)
+    │   ├── node/                   #   SÉMANTIQUE : NodeApi sur les services du nœud — zéro JSON
+    │   ├── jsonrpc/                #   PROTOCOLE : enveloppe 2.0 + Codec DTOs↔JSON + proxy client
+    │   └── http/                   #   TRANSPORT : POST / (curl-able) — porte des octets, zéro JSON
+    ├── wallet/                     # IWallet + WalletConfig + Factory — binaire séparé rscoin-wallet
+    │   ├── local/                  #   wallet logiciel local (hardware/remote = frères futurs)
+    │   ├── keystore/               #   clés sur IKeyValueStore (⚠ en clair, chiffrement à venir)
+    │   └── cli/                    #   main.cpp du binaire wallet
     └── node/                       # le nœud — ne voit QUE les contrats
 ```
 
 ## Graphe de dépendances (règle d'or)
 
-La discipline se lit dans les `#include` (chemins relatifs à `src/`) : d'un autre
-module, on n'inclut **que son contrat `I*.hpp`** — jamais une implémentation
-(`TcpNetwork.hpp`, `RSCoinProtocol.hpp`…), ni une `Factory` (réservée à `main.cpp`).
+La discipline se lit dans les `#include` (chemins relatifs à `src/`) : **la racine
+d'un module est son API publique** (contrats `I*.hpp`, configs, Factory, boîte à
+outils comme `network/Socket` ou `protocol/Dispatcher`) — **ses sous-dossiers sont
+privés**, jamais inclus depuis un autre module (`network/tcp/…`, `consensus/pow/…`).
+Les `Factory` restent réservées aux composition roots (`main.cpp`, `wallet/cli/`).
 
 - `core/` → rien ; `primitives/` → `core/` ; `config/` → `core/` ; `log/`, `utils/` → infrastructure
 - modules d'implémentation (`crypto/`, `storage/`, `network/`, `protocol/`, `consensus/`,
@@ -158,14 +169,30 @@ les modules `chain`/`state` à venir.
 5. **Tests contractuels** : une suite par interface, que chaque implémentation doit
    passer (ex. la même suite valide `MemoryKeyValueStore` et `FileKeyValueStore`).
 
+## Transactions signées : le circuit complet
+
+Les clés n'entrent jamais dans le nœud. Le binaire `rscoin-wallet` (même fichier de
+configuration que le nœud → crypto/chainId/RPC cohérents par construction) signe
+localement et soumet par JSON-RPC :
+
+- digest signé = `hasher(encodeForSigning(tx, chainId))` (la tx sans son champ
+  signature + chainId, anti-rejeu façon EIP-155 — dans `primitives/Codec`) ;
+- la `Signature` est un blob **autoportant** dont le format appartient au schéma
+  (`[pubkey][sig]`) ; `ISignatureScheme::authenticate(digest, blob) → Address`
+  rend le schéma totalement interchangeable (le validateur ne connaît ni pubkey
+  ni format) ;
+- `AccountStateMachine` vérifie `authenticate(...) == tx.from` pour TOUTE
+  transaction (mempool et blocs) — une tx non/mal signée est `rejected`/`invalid`.
+
+`./rscoin-wallet --new | --list | --balance 0x… | --send --to 0x… --value N`
+
 ## État actuel et prochaines étapes
 
-Le nœud est fonctionnel de bout en bout : il démarre depuis le JSON (genesis compris),
-mine en PoW sur son propre thread, persiste et redémarre à la bonne hauteur, se
-synchronise entre pairs (rattrapage + suivi en direct) et relaie les transactions
-(admission validée par le mempool, anti-écho par pair).
+Le nœud est fonctionnel de bout en bout : boot 100 % config (genesis compris), PoW
+sur thread dédié, persistance/redémarrage, sync P2P, relais de transactions, wallet
+CLI + RPC, signatures ECDSA réelles (`secp256k1`) vérifiées par le consensus.
 
-1. soumission de transactions (wallet : clés + signature, puis CLI/RPC) ;
-2. vraie crypto : `crypto/secp256k1/` + vérification des signatures dans `state/` ;
-3. reorgs (`consensus.compare` + stockage des chaînes latérales) ;
-4. retargeting de la difficulté PoW ; snapshot d'état persistant au démarrage.
+1. reorgs (`consensus.compare` + stockage des chaînes latérales) ;
+2. retargeting de la difficulté PoW ; snapshot d'état persistant au démarrage ;
+3. chiffrement du keystore (scrypt+AES) ; frais de transaction + tri du mempool ;
+4. moteurs `pos`/`poa`.

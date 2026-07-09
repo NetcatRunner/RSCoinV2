@@ -7,8 +7,6 @@
 
 namespace RSCoin::Rpc {
 
-    // Les réponses de l'API du nœud, en types du domaine : le JSON n'est
-    // qu'un format de fil, confiné à rpc/api/ et rpc/http/.
     struct AccountInfo {
         core::Amount balance;
         std::uint64_t nonce{};

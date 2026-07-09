@@ -11,8 +11,7 @@ namespace RSCoin::Wallet {
         constexpr char kSeparator = ':';
 
         core::Bytes toBytes(std::string_view text) {
-            return {reinterpret_cast<const std::byte*>(text.data()),
-                    reinterpret_cast<const std::byte*>(text.data()) + text.size()};
+            return {reinterpret_cast<const std::byte*>(text.data()), reinterpret_cast<const std::byte*>(text.data()) + text.size()};
         }
 
         std::string toText(const core::Bytes& bytes) {

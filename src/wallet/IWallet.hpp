@@ -8,7 +8,6 @@
 
 namespace RSCoin::Wallet {
 
-    // Ce que l'utilisateur veut envoyer ; le wallet complète et signe.
     struct TransactionRequest {
         core::Address from;
         core::Address to;
@@ -17,8 +16,6 @@ namespace RSCoin::Wallet {
         core::Bytes payload;
     };
 
-    // Gestion de clés et signature — les clés ne quittent JAMAIS le wallet :
-    // le nœud ne reçoit que des transactions déjà signées.
     class IWallet {
     public:
         virtual ~IWallet() = default;

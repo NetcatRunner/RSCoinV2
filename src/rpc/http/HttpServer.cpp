@@ -1,28 +1,26 @@
-#include "rpc/http/HttpRpcServer.hpp"
+#include "rpc/http/HttpServer.hpp"
 
 #include <utility>
 
 #include <httplib.h>
 
 #include "log/Logger.hpp"
-#include "rpc/api/Envelope.hpp"
 
 namespace RSCoin::Rpc {
 
-    HttpRpcServer::HttpRpcServer(RpcConfig config, NodeServices services)
-        : _config(std::move(config)), _methods(services), _server(std::make_unique<httplib::Server>()) {
+    HttpServer::HttpServer(RpcConfig config, std::unique_ptr<IRequestHandler> handler)
+        : _config(std::move(config)), _handler(std::move(handler)), _server(std::make_unique<httplib::Server>()) {
         _server->Post("/", [this](const httplib::Request& request, httplib::Response& response) {
-            response.set_content(handleRequest(_methods, request.body), "application/json");
+            response.set_content(_handler->handle(request.body), std::string(_handler->contentType()));
         });
     }
 
-    HttpRpcServer::~HttpRpcServer() { stop(); }
+    HttpServer::~HttpServer() { stop(); }
 
-    core::Result<void> HttpRpcServer::start() {
+    core::Result<void> HttpServer::start() {
         if (_thread.joinable())
             return core::fail(core::ErrorCode::network, "rpc server already started");
 
-        // bind séparé du listen : l'échec de bind est rapporté ici, pas dans le thread.
         if (!_server->bind_to_port(_config.listenAddress, _config.port))
             return core::fail(core::ErrorCode::network,
                 "cannot bind rpc server to " + _config.listenAddress + ":" + std::to_string(_config.port));
@@ -32,7 +30,7 @@ namespace RSCoin::Rpc {
         return {};
     }
 
-    void HttpRpcServer::stop() {
+    void HttpServer::stop() {
         if (!_thread.joinable())
             return;
         _server->stop();

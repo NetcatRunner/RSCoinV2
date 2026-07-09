@@ -8,7 +8,6 @@
 
 namespace RSCoin::Rpc {
 
-    // Services du nœud exposés à l'API, assemblés par la composition root.
     struct NodeServices {
         Chain::IBlockchain& chain;
         Chain::IChainManager& manager;

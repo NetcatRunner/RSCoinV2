@@ -23,8 +23,6 @@ namespace {
     constexpr const char* kDefaultConfigPath = "config/node.pow.json";
     constexpr const char* kProgramName = "rscoin-wallet";
 
-    // Le wallet lit le MÊME fichier de configuration que le nœud : crypto,
-    // chainId et endpoint RPC sont garantis cohérents avec la chaîne.
     struct Context {
         std::unique_ptr<Crypto::ICryptoProvider> crypto;
         std::unique_ptr<Storage::IKeyValueStore> keystore;
