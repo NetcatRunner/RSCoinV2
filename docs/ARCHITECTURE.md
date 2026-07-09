@@ -71,10 +71,12 @@ RSCoin2/
     │   ├── node/                   #   SÉMANTIQUE : NodeApi sur les services du nœud — zéro JSON
     │   ├── jsonrpc/                #   PROTOCOLE : enveloppe 2.0 + Codec DTOs↔JSON + proxy client
     │   └── http/                   #   TRANSPORT : POST / (curl-able) — porte des octets, zéro JSON
-    ├── wallet/                     # IWallet + WalletConfig + Factory — binaire séparé rscoin-wallet
+    ├── wallet/                     # IWallet + IWalletUi + WalletConfig + Factory — binaire rscoin-wallet
     │   ├── local/                  #   wallet logiciel local (hardware/remote = frères futurs)
     │   ├── keystore/               #   clés sur IKeyValueStore (⚠ en clair, chiffrement à venir)
-    │   └── cli/                    #   main.cpp du binaire wallet
+    │   ├── terminal/               #   frontend "terminal" : commandes ponctuelles, scriptable
+    │   ├── web/                    #   frontend "web" : page locale embarquée + API JSON (127.0.0.1)
+    │   └── cli/                    #   main.cpp du binaire wallet (point d'entrée)
     └── node/                       # Node (cycle de vie, contrats uniquement) + Factory = LA composition root
 ```
 
@@ -204,6 +206,13 @@ localement et soumet par JSON-RPC :
   transaction (mempool et blocs) — une tx non/mal signée est `rejected`/`invalid`.
 
 `./rscoin-wallet --new | --list | --balance 0x… | --send --to 0x… --value N`
+
+Le frontend est choisi par `wallet.interface` ("terminal" | "web") — une commande
+explicite prime toujours (scriptable). En mode web, le wallet sert une page locale
+(embarquée dans le binaire) sur `http://127.0.0.1:<uiPort>` : le navigateur n'est
+que l'affichage, les clés et la signature restent côté C++ — l'écoute est verrouillée
+sur la boucle locale à dessein (pas de configuration possible). Un frontend graphique
+natif (ImGui, RSGL…) serait un dossier frère + une entrée de factory.
 
 ## Reorgs : le choix de fourche appliqué
 

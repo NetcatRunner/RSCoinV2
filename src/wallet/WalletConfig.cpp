@@ -8,6 +8,10 @@ namespace RSCoin::Wallet {
 
         Config::Reader reader(section);
         reader.read("keystoreDirectory", keystoreDirectory);
+        reader.read("interface", config.interface);
+        if (config.interface == "web")
+            reader.read("uiPort", config.uiPort);
+
         config.keystoreDirectory = std::move(keystoreDirectory);
         return reader.finish(std::move(config));
     }

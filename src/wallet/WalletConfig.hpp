@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <filesystem>
 #include <string>
 
@@ -12,6 +13,8 @@ namespace RSCoin::Wallet {
         static constexpr const char* kSection = "wallet";
 
         std::filesystem::path keystoreDirectory;
+        std::string interface;
+        std::uint16_t uiPort{};
 
         static core::Result<WalletConfig> from(const Config::Section& section);
     };
