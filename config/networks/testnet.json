@@ -1,11 +1,11 @@
 {
     "chain": {
-        "id": 1337
+        "id": 1338
     },
     "genesis": {
         "timestamp": 1751980800,
         "allocations": [
-            { "address": "0x716979c557370daaaa0d0975a5714632325446ff", "balance": 1000000000 }
+             { "address": "0xeb10dca744c9c6cdb150759aa7cd4f6d26fbd9f0", "balance": 100 }
         ],
         "consensusSeal": "0x00"
     },
@@ -22,10 +22,10 @@
     },
     "crypto": {
         "hasher": "sha256d",
-        "signatureScheme": "insecure-stub"
+        "signatureScheme": "secp256k1"
     },
     "state": {
-        "blockReward": 1
+        "blockReward": 5
     },
     "protocol": {
         "name": "rscoin",
