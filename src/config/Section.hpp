@@ -20,7 +20,6 @@ namespace RSCoin::Config {
         concept OneOf = (std::is_same_v<T, Options> || ...);
     }
 
-    // Types lisibles depuis une section (Address et Bytes attendent de l'hexa).
     template <typename T>
     concept SectionValue = detail::OneOf<T,
         bool, std::uint16_t, std::uint32_t, std::uint64_t,
@@ -28,15 +27,11 @@ namespace RSCoin::Config {
         std::map<std::string, std::string>,
         core::Address, core::Bytes, core::Amount>;
 
-    // Vue non propriétaire sur une section du fichier de configuration.
-    // La façade s'arrête ici : les modules lisent des valeurs typées et ne
-    // savent pas que le format sous-jacent est du JSON.
     class Section {
     public:
         template <SectionValue T>
         core::Result<T> get(std::string_view key) const;
 
-        // Tableaux d'objets (ex. genesis.allocations).
         core::Result<std::vector<Section>> list(std::string_view key) const;
 
         std::string_view name() const noexcept { return _name; }
@@ -49,10 +44,6 @@ namespace RSCoin::Config {
         std::string _name;
     };
 
-    // Lit plusieurs clés en ne retenant que la première erreur :
-    //     Config::Reader reader(section);
-    //     reader.read("port", config.port);
-    //     return reader.finish(std::move(config));
     class Reader {
     public:
         explicit Reader(const Section& section) : _section(section) {}

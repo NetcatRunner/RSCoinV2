@@ -17,6 +17,7 @@ file(GLOB_RECURSE SOURCES
 
 add_subdirectory(vendor/RSTools)
 add_subdirectory(vendor/nlohmann)
+add_subdirectory(vendor/secp256k1)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 
@@ -29,6 +30,7 @@ target_link_libraries(${PROJECT_NAME}
     PRIVATE
         RST
         nlohmann_json::nlohmann_json
+        secp256k1
 )
 
 target_compile_options(${PROJECT_NAME}
