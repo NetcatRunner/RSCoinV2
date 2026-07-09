@@ -2,8 +2,6 @@
 - netoyer un peut les fonction dans namespace anonyme
 - Fix fast miner sigint
 
-- Interface graphique pour le cli
-
 - Retargeting PoW — difficulté fixe = temps de bloc incontrôlé.
 
 - Update AccountStateMachine ppur limité usage de la ram

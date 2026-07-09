@@ -5,7 +5,7 @@
     "genesis": {
         "timestamp": 1751980800,
         "allocations": [
-             { "address": "0xeb10dca744c9c6cdb150759aa7cd4f6d26fbd9f0", "balance": 100 }
+             { "address": "0x142d27df461600205ebb4bed8e07ef21d06af434", "balance": 100 }
         ],
         "consensusSeal": "0x00"
     },
