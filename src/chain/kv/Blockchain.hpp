@@ -18,6 +18,9 @@ namespace RSCoin::Chain {
         core::Result<Primitives::BlockHeader> headerByHeight(std::uint64_t height) const override;
 
         core::Result<void> appendBlock(const Primitives::Block& block) override;
+        core::Result<void> storeBlock(const Primitives::Block& block) override;
+        core::Result<void> adoptBranch(const std::vector<Primitives::Block>& branch) override;
+
         core::Result<Primitives::Block> blockByHash(const core::Hash256& hash) const override;
         core::Result<Primitives::Block> blockByHeight(std::uint64_t height) const override;
 

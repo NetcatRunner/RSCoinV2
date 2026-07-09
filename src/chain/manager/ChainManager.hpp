@@ -18,19 +18,28 @@ namespace RSCoin::Chain {
             const Crypto::IHasher& hasher;
         };
 
-        ChainManager(Dependencies dependencies, std::unique_ptr<State::IStateMachine> genesisState);
+        static core::Result<std::unique_ptr<ChainManager>> create(Dependencies dependencies, std::unique_ptr<State::IStateMachine> genesisState);
 
         core::Result<ImportOutcome> importBlock(const Primitives::Block& block, ImportOrigin origin) override;
         std::shared_ptr<const State::IStateMachine> ledger() const override;
         void subscribe(BlockSubscriber subscriber) override;
 
     private:
+        using Ledger = std::shared_ptr<const State::IStateMachine>;
+
+        ChainManager(Dependencies dependencies, Ledger genesis)
+            : _deps(dependencies), _genesisLedger(std::move(genesis)) {}
+
         core::Result<ImportOutcome> importLocked(const Primitives::Block& block);
+        core::Result<ImportOutcome> reorgLocked(const Primitives::Block& tip);
+
+        core::Result<Ledger> replayBranch(const std::vector<Primitives::Block>& branch) const;
 
         Dependencies _deps;
+        Ledger _genesisLedger;
 
         mutable std::mutex _mutex;
-        std::shared_ptr<const State::IStateMachine> _ledger;
+        Ledger _ledger;
         std::vector<BlockSubscriber> _subscribers;
     };
 

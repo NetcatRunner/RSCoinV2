@@ -97,10 +97,10 @@ namespace RSCoin::Mining {
         if (!outcome)
             return core::fail(outcome.error(), "importing mined block");
 
-        if (*outcome == Chain::ImportOutcome::imported)
+        if (*outcome == Chain::ImportOutcome::imported || *outcome == Chain::ImportOutcome::reorged)
             RSCoin_INFO("mined block {} ({} txs, head {})", sealed->header.height, sealed->transactions.size(), core::toHex(_deps.chain.headHash()));
         else
-            RSCoin_WARN("mined block {} discarded (chain advanced during sealing)", sealed->header.height);
+            RSCoin_WARN("mined block {} not adopted (chain advanced during sealing)", sealed->header.height);
         return {};
     }
 

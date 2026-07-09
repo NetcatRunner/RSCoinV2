@@ -181,8 +181,7 @@ namespace {
         if (parser.isSet("--balance"))
             return commandBalance(*context, parser.getOption<std::string>("--balance"));
         if (parser.isSet("--send"))
-            return commandSend(*context, parser.getOption<std::string>("--from"),
-                               parser.getOption<std::string>("--to"), parser.getOption<std::string>("--value"));
+            return commandSend(*context, parser.getOption<std::string>("--from"), parser.getOption<std::string>("--to"), parser.getOption<std::string>("--value"));
 
         return core::fail(core::ErrorCode::config, "no command (use --new, --list, --balance or --send; see --help)");
     }

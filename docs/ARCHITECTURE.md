@@ -61,8 +61,8 @@ RSCoin2/
     ├── mining/                     # IMiner + MiningConfig + Factory
     │   └── local/                  #   mineur local : son propre thread, seal via IConsensus
     ├── chain/                      # IBlockchain/IChainManager/IChainView + configs + Factory
-    │   ├── kv/                     #   Blockchain : dépôt de blocs sur IKeyValueStore
-    │   ├── manager/                #   ChainManager : la voie d'écriture unique de la chaîne
+    │   ├── kv/                     #   Blockchain : ARBRE de blocs sur IKeyValueStore (branches conservées)
+    │   ├── manager/                #   ChainManager : voie d'écriture unique + fork choice (reorgs)
     │   └── genesis/                #   construction du bloc 0 depuis la config
     ├── rpc/                        # INodeApi (l'API, typée) + IRpcServer + ITransport (coutures) + Api (DTOs)
     │   ├── node/                   #   SÉMANTIQUE : NodeApi sur les services du nœud — zéro JSON
@@ -186,13 +186,26 @@ localement et soumet par JSON-RPC :
 
 `./rscoin-wallet --new | --list | --balance 0x… | --send --to 0x… --value N`
 
+## Reorgs : le choix de fourche appliqué
+
+Le dépôt de blocs est un **arbre** (à la geth) : un bloc qui ne prolonge pas la tête
+est conservé (`storeBlock`) au lieu d'être jeté. `ChainManager` reste l'unique voie
+d'écriture : si `consensus.compare` juge la branche latérale meilleure, `reorgLocked`
+remonte la branche au tronc commun, la **rejoue depuis le genesis** (stateRoots
+vérifiés — une branche invalide annule tout, l'ancienne chaîne reste), puis
+`adoptBranch` bascule l'index canonique en un batch atomique. Le mempool n'a rien à
+savoir : son éviction paresseuse élimine les transactions invalidées par la bascule.
+Côté sync, si un batch reçu ne se raccorde pas, le protocole redemande une fenêtre
+plus tôt jusqu'au tronc commun (et déconnecte si les genesis diffèrent).
+
 ## État actuel et prochaines étapes
 
 Le nœud est fonctionnel de bout en bout : boot 100 % config (genesis compris), PoW
-sur thread dédié, persistance/redémarrage, sync P2P, relais de transactions, wallet
-CLI + RPC, signatures ECDSA réelles (`secp256k1`) vérifiées par le consensus.
+sur thread dédié, persistance/redémarrage, sync P2P avec reorgs (deux mineurs
+concurrents convergent), relais de transactions, wallet CLI + RPC, signatures ECDSA
+réelles (`secp256k1`) vérifiées par le consensus.
 
-1. reorgs (`consensus.compare` + stockage des chaînes latérales) ;
-2. retargeting de la difficulté PoW ; snapshot d'état persistant au démarrage ;
-3. chiffrement du keystore (scrypt+AES) ; frais de transaction + tri du mempool ;
-4. moteurs `pos`/`poa`.
+1. retargeting de la difficulté PoW ; snapshot d'état persistant au démarrage
+   (les reorgs profonds rejouent depuis le genesis — un cache d'états l'évitera) ;
+2. chiffrement du keystore (scrypt+AES) ; frais de transaction + tri du mempool ;
+3. moteurs `pos`/`poa`.

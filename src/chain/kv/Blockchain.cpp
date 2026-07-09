@@ -150,6 +150,40 @@ namespace RSCoin::Chain {
         return {};
     }
 
+    core::Result<void> Blockchain::storeBlock(const Primitives::Block& block) {
+        const core::Hash256 hash = _hasher.hash(Primitives::encode(block.header));
+
+        Storage::WriteBatch batch;
+        batch.put(hashKey('H', hash), Primitives::encode(block.header));
+        batch.put(hashKey('B', hash), Primitives::encode(block));
+        return _store.apply(std::move(batch));
+    }
+
+    core::Result<void> Blockchain::adoptBranch(const std::vector<Primitives::Block>& branch) {
+        std::lock_guard lock(_mutex);
+
+        if (branch.empty())
+            return core::fail(core::ErrorCode::validation, "empty branch");
+
+        Storage::WriteBatch batch;
+        for (const auto& block : branch)
+            batch.put(heightKey(block.header.height), toBytes(_hasher.hash(Primitives::encode(block.header))));
+
+        const Primitives::BlockHeader& tip = branch.back().header;
+        for (std::uint64_t stale = tip.height + 1; stale <= _head.height; ++stale)
+            batch.erase(heightKey(stale));
+
+        const core::Hash256 tipHash = _hasher.hash(Primitives::encode(tip));
+        batch.put(headKey(), toBytes(tipHash));
+
+        if (auto applied = _store.apply(std::move(batch)); !applied)
+            return core::fail(applied.error(), "adopting branch");
+
+        _head = tip;
+        _headHash = tipHash;
+        return {};
+    }
+
     core::Result<void> Blockchain::writeBlock(const Primitives::Block& block, const core::Hash256& hash) {
         Storage::WriteBatch batch;
         batch.put(hashKey('H', hash), Primitives::encode(block.header));

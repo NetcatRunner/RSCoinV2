@@ -13,6 +13,7 @@ namespace RSCoin::Chain {
 
     enum class ImportOutcome {
         imported,
+        reorged,
         alreadyKnown,
         orphaned,
         forked,
